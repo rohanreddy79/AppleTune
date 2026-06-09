@@ -1,4 +1,5 @@
 // FineTune/Audio/Engine/ProcessTapController.swift
+import Accelerate
 import AudioToolbox
 import Foundation
 import os
@@ -112,6 +113,30 @@ final class ProcessTapController: ProcessTapControlling {
     /// Input below this peak magnitude is treated as silence (≈ -80 dBFS).
     nonisolated private static let outputGateSilenceThreshold: Float = 0.0001
 
+    /// AI hook state (blueprint Track 0). The control plane publishes
+    /// AIRenderParameters setpoints through `aiParameterBus`; the primary
+    /// callback (single-consumer contract) acquires them and slews
+    /// `_aiCurrentGainTrim` toward the setpoint. `_aiBypass` is the hard
+    /// gate: one store instruction forces the slew target back to neutral,
+    /// evicting the AI contribution click-free within a few buffers.
+    /// Bypassed by default — with no publisher the hook is bit-exact.
+    private nonisolated(unsafe) var _aiBypass: Bool = true
+    /// Slewed AI gain trim applied at the hook. Primary callback only.
+    private nonisolated(unsafe) var _aiCurrentGainTrim: Float = 1.0
+    /// Host time of the most recently acquired AI snapshot (0 = never).
+    /// Written by the primary callback; read by health checks on main.
+    private nonisolated(unsafe) var _aiLastSnapshotHostTime: UInt64 = 0
+    /// Duration of the last full render callback in host ticks (not nanos —
+    /// the RT thread stores the raw delta; conversion happens on main).
+    private nonisolated(unsafe) var _lastRenderDurationHostTicks: UInt64 = 0
+    /// Snapshots older than this decay toward neutral: the control plane is
+    /// allowed to be late, audio is not — staleness is a fade, not an error.
+    nonisolated private static let aiParameterStalenessSeconds: Double = 0.5
+    /// Per-buffer slew factor for the AI gain trim (~10–20 buffers to
+    /// converge ≈ 30–100 ms depending on buffer size). Per-buffer rather
+    /// than per-frame: trims are control-rate, not signal-rate.
+    nonisolated private static let aiTrimSlewPerBuffer: Float = 0.2
+
     // MARK: - Non-RT State (modified only from main thread)
 
     /// VU meter smoothing factor. 0.3 gives ~30ms attack/decay at typical 30fps UI refresh.
@@ -135,6 +160,11 @@ final class ProcessTapController: ProcessTapControlling {
     private nonisolated(unsafe) var secondaryAutoEQProcessor: AutoEQProcessor?
     private nonisolated(unsafe) var secondaryLoudnessCompensator: LoudnessCompensator?
     private nonisolated(unsafe) var secondaryLoudnessEqualizerProcessor: LoudnessEqualizer?
+    /// Control-plane parameter bus consumed by the primary callback.
+    /// Swapped from main thread like the processors above; the bus itself
+    /// is lock-free and must outlive the last callback that touches it
+    /// (same ownership rule as the EQ processors).
+    private nonisolated(unsafe) var aiParameterBus: AIRenderParameterBus?
 
     // Target device UIDs for synchronized multi-output (first is clock source)
     private var targetDeviceUIDs: [String]
@@ -184,6 +214,43 @@ final class ProcessTapController: ProcessTapControlling {
         guard started != 0 else { return false }
         let deltaNanos = Double(mach_absolute_time() &- started) * Self.hostTimeNanosScale
         return deltaNanos >= (minActiveSeconds * 1_000_000_000.0)
+    }
+
+    // MARK: - AI Hook Control (main thread)
+
+    /// Attach (or detach) the control-plane parameter bus. The bus must be
+    /// kept alive by the caller until after this controller is invalidated.
+    func setAIParameterBus(_ bus: AIRenderParameterBus?) {
+        aiParameterBus = bus
+    }
+
+    /// Whether the AI hook is bypassed (the default).
+    var isAIBypassed: Bool { _aiBypass }
+
+    /// Engage or release the AI bypass. Engaging forces the slew target to
+    /// neutral — the AI contribution fades out within a few buffers rather
+    /// than stepping, so this is click-free and safe to call at any time.
+    func setAIBypassed(_ bypassed: Bool) {
+        _aiBypass = bypassed
+    }
+
+    /// Whether the primary callback has acquired an AI parameter snapshot
+    /// within `seconds`. The staleness sibling of `hasRecentAudioCallback`:
+    /// health monitoring uses this to detect a stalled control plane and
+    /// trip the bypass.
+    func hasFreshAIParameters(within seconds: Double) -> Bool {
+        let last = _aiLastSnapshotHostTime
+        guard last != 0 else { return false }
+        let deltaNanos = Double(mach_absolute_time() &- last) * Self.hostTimeNanosScale
+        return deltaNanos <= (seconds * 1_000_000_000.0)
+    }
+
+    /// Duration of the most recent full render callback in nanoseconds.
+    /// The RT thread stores raw host ticks; conversion happens here so the
+    /// callback pays one subtraction. Budget regressions (e.g. from new
+    /// hook work) show up directly in this number.
+    var lastRenderDurationNanoseconds: Double {
+        Double(_lastRenderDurationHostTicks) * Self.hostTimeNanosScale
     }
 
     var currentDeviceVolume: Float {
@@ -1188,7 +1255,8 @@ final class ProcessTapController: ProcessTapControlling {
         eqProc: EQProcessor?,
         autoEQProc: AutoEQProcessor?,
         loudnessEqualizerProc: LoudnessEqualizer?,
-        loudnessCompensatorProc: LoudnessCompensator?
+        loudnessCompensatorProc: LoudnessCompensator?,
+        aiGainTrim: Float = 1.0
     ) {
         let inputBufferCount = inputBuffers.count
         let outputBufferCount = outputBuffers.count
@@ -1311,6 +1379,16 @@ final class ProcessTapController: ProcessTapControlling {
                 eq.process(input: outputSamples, output: outputSamples, frameCount: frameCount)
             }
 
+            // [AI HOOK] Control-plane contribution point (between per-app EQ
+            // and per-device AutoEQ — blueprint §1.2). Currently a slewed
+            // gain trim; unity is the bit-exact fast path. Applies to all
+            // channel layouts, unlike the stereo-only biquad stages.
+            if aiGainTrim != 1.0 {
+                var trim = aiGainTrim
+                let writtenSamples = frameCount * outputChannels
+                vDSP_vsmul(outputSamples, 1, &trim, outputSamples, 1, vDSP_Length(writtenSamples))
+            }
+
             // Per-device AutoEQ correction (after per-app EQ)
             if let autoEQProc, autoEQProc.isEnabled, eqCanProcessStereoInterleaved {
                 autoEQProc.process(input: outputSamples, output: outputSamples, frameCount: frameCount)
@@ -1353,7 +1431,8 @@ final class ProcessTapController: ProcessTapControlling {
         to outputBufferList: UnsafeMutablePointer<AudioBufferList>,
         callbackID: UInt32
     ) {
-        _lastRenderHostTime = mach_absolute_time()
+        let callbackStartHostTime = mach_absolute_time()
+        _lastRenderHostTime = callbackStartHostTime
         _hasRenderedAudio = true
 
         let isPrimary = (callbackID == _primaryCallbackID)
@@ -1477,6 +1556,31 @@ final class ProcessTapController: ProcessTapControlling {
             loudnessCompensatorProc = secondaryLoudnessCompensator
         }
 
+        // AI hook parameter acquisition — primary only, honoring the bus's
+        // single-consumer contract (exactly one callback matches
+        // _primaryCallbackID at any instant, including across promotion).
+        // RT-safe: acquireLatest() is one relaxed load plus at most one
+        // atomic exchange; everything else here is plain arithmetic.
+        // The trim is a *slew target*: stale snapshots and engaged bypass
+        // both decay toward neutral instead of stepping, so AI eviction is
+        // click-free while remaining a single store instruction away.
+        var aiGainTrim: Float = 1.0
+        if isPrimary {
+            var trimTarget: Float = 1.0
+            if !_aiBypass, let bus = aiParameterBus,
+               let snapshot = bus.acquireLatest() {
+                _aiLastSnapshotHostTime = snapshot.hostTime
+                if !snapshot.isStale(after: Self.aiParameterStalenessSeconds, asOf: callbackStartHostTime) {
+                    trimTarget = min(max(snapshot.payload.gainTrim, 0.0), 4.0)
+                }
+            }
+            _aiCurrentGainTrim += (trimTarget - _aiCurrentGainTrim) * Self.aiTrimSlewPerBuffer
+            // Snap once within rounding distance of unity so the hook's
+            // bit-exact fast path re-engages after AI activity ends.
+            if abs(_aiCurrentGainTrim - 1.0) < 0.0001 { _aiCurrentGainTrim = 1.0 }
+            aiGainTrim = _aiCurrentGainTrim
+        }
+
         Self.processMappedBuffers(
             inputBuffers: inputBuffers,
             outputBuffers: outputBuffers,
@@ -1490,7 +1594,8 @@ final class ProcessTapController: ProcessTapControlling {
             eqProc: eqProc,
             autoEQProc: autoEQProc,
             loudnessEqualizerProc: loudnessEqualizerProc,
-            loudnessCompensatorProc: loudnessCompensatorProc
+            loudnessCompensatorProc: loudnessCompensatorProc,
+            aiGainTrim: aiGainTrim
         )
 
         if isPrimary {
@@ -1498,5 +1603,9 @@ final class ProcessTapController: ProcessTapControlling {
         } else {
             _secondaryCurrentVolume = currentVol
         }
+
+        // Raw host-tick delta only — the nanosecond conversion (and its
+        // lazily initialized timebase scale) stays on the main thread.
+        _lastRenderDurationHostTicks = mach_absolute_time() &- callbackStartHostTime
     }
 }
