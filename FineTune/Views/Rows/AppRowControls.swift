@@ -25,7 +25,6 @@ struct AppRowControls: View {
     var isRowFocused: Bool = false
 
     @State private var dragOverrideValue: Double?
-    @State private var isEQButtonHovered = false
 
     private var sliderValue: Double {
         dragOverrideValue ?? VolumeMapping.gainToSlider(volume)
@@ -53,16 +52,6 @@ struct AppRowControls: View {
     /// mapping round-trip can leave sliderValue at tiny non-zero values (e.g. 0.003)
     /// that display as "0%" but fail exact Double equality.
     private var showMutedIcon: Bool { isMuted || displayedPercentage == 0 }
-
-    private var eqButtonColor: Color {
-        if isEQExpanded {
-            return DesignTokens.Colors.interactiveActive
-        } else if isEQButtonHovered {
-            return DesignTokens.Colors.interactiveHover
-        } else {
-            return DesignTokens.Colors.interactiveDefault
-        }
-    }
 
     var body: some View {
         HStack(spacing: DesignTokens.Spacing.sm) {
@@ -127,7 +116,7 @@ struct AppRowControls: View {
                 triggerStyle: .iconOnly
             )
 
-            // EQ button
+            // EQ button — GlassIconButtonStyle keeps it lit while expanded
             Button {
                 onEQToggle()
             } label: {
@@ -141,20 +130,11 @@ struct AppRowControls: View {
                         .rotationEffect(.degrees(isEQExpanded ? 0 : -90))
                 }
                 .font(.system(size: 12))
-                .symbolRenderingMode(.hierarchical)
-                .foregroundStyle(eqButtonColor)
-                .frame(
-                    minWidth: DesignTokens.Dimensions.minTouchTarget,
-                    minHeight: DesignTokens.Dimensions.minTouchTarget
-                )
-                .contentShape(Rectangle())
             }
-            .buttonStyle(.plain)
+            .buttonStyle(GlassIconButtonStyle(isActive: isEQExpanded))
             .accessibilityLabel(isEQExpanded ? "Close Equalizer" : "Equalizer")
-            .onHover { isEQButtonHovered = $0 }
             .help(isEQExpanded ? "Close Equalizer" : "Equalizer")
             .animation(.spring(response: 0.3, dampingFraction: 0.75), value: isEQExpanded)
-            .animation(DesignTokens.Animation.hover, value: isEQButtonHovered)
         }
         .fixedSize()
     }

@@ -80,32 +80,44 @@ struct IconButtonStyleModifier: ViewModifier {
 
 // MARK: - Glass Button Style Modifier
 
-/// Button styling for glass aesthetic with vibrancy
+/// Capsule pill button for the glass aesthetic (Quit, Retry, Connect).
+///
+/// On macOS 26+ the capsule renders Apple's interactive Liquid Glass —
+/// the system supplies hover lensing and press response. On earlier
+/// systems it keeps the shipped ultraThinMaterial capsule + hairline
+/// border with manual hover/press feedback.
 struct GlassButtonStyleModifier: ViewModifier {
     @State private var isHovered = false
     @State private var isPressed = false
 
     func body(content: Content) -> some View {
-        content
-            .padding(.horizontal, DesignTokens.Spacing.sm)
-            .padding(.vertical, DesignTokens.Spacing.xs)
-            .background {
-                Capsule()
-                    .fill(.ultraThinMaterial)
-            }
-            .overlay {
-                Capsule()
-                    .strokeBorder(
-                        isHovered ? DesignTokens.Colors.glassBorderHover : DesignTokens.Colors.glassBorder,
-                        lineWidth: 0.5
-                    )
-            }
-            .scaleEffect(isPressed ? 0.97 : (isHovered ? 1.02 : 1.0))
-            .onHover { hovering in
-                isHovered = hovering
-            }
-            .animation(DesignTokens.Animation.hover, value: isHovered)
-            .animation(DesignTokens.Animation.quick, value: isPressed)
+        if #available(macOS 26.0, *) {
+            content
+                .padding(.horizontal, DesignTokens.Spacing.sm)
+                .padding(.vertical, DesignTokens.Spacing.xs)
+                .glassEffect(.regular.interactive(), in: Capsule())
+        } else {
+            content
+                .padding(.horizontal, DesignTokens.Spacing.sm)
+                .padding(.vertical, DesignTokens.Spacing.xs)
+                .background {
+                    Capsule()
+                        .fill(DesignTokens.Materials.cardSurface)
+                }
+                .overlay {
+                    Capsule()
+                        .strokeBorder(
+                            isHovered ? DesignTokens.Colors.glassBorderHover : DesignTokens.Colors.glassBorder,
+                            lineWidth: 0.5
+                        )
+                }
+                .scaleEffect(isPressed ? 0.97 : (isHovered ? 1.02 : 1.0))
+                .onHover { hovering in
+                    isHovered = hovering
+                }
+                .animation(DesignTokens.Animation.hover, value: isHovered)
+                .animation(DesignTokens.Animation.quick, value: isPressed)
+        }
     }
 }
 

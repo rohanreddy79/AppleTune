@@ -147,10 +147,8 @@ struct EQPanelView: View {
         } label: {
             Image(systemName: "plus.circle")
                 .font(.system(size: 13))
-                .symbolRenderingMode(.hierarchical)
-                .foregroundStyle(DesignTokens.Colors.interactiveDefault)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(GlassIconButtonStyle())
         .help("Save current EQ as preset")
         .accessibilityLabel("Save current EQ curve as a new preset")
     }
@@ -238,10 +236,8 @@ struct EQPanelView: View {
         } label: {
             Image(systemName: "pencil")
                 .font(.system(size: 12))
-                .symbolRenderingMode(.hierarchical)
-                .foregroundStyle(DesignTokens.Colors.interactiveDefault)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(GlassIconButtonStyle())
         .help("Rename preset")
         .accessibilityLabel("Rename current preset")
     }

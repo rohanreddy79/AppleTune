@@ -50,16 +50,7 @@ struct PairedDeviceRow: View {
                 .buttonStyle(.plain)
                 .font(.system(size: 11, weight: .medium))
                 .foregroundStyle(DesignTokens.Colors.textPrimary)
-                .padding(.horizontal, DesignTokens.Spacing.sm)
-                .padding(.vertical, DesignTokens.Spacing.xxs + 1)
-                .background(
-                    RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
-                        .fill(DesignTokens.Materials.controlSurface)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
-                        .strokeBorder(DesignTokens.Colors.glassRowBorder, lineWidth: 0.5)
-                )
+                .glassButtonStyle()
             }
         }
         .frame(height: DesignTokens.Dimensions.rowContentHeight)

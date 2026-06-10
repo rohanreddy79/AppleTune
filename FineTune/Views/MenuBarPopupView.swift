@@ -255,22 +255,16 @@ struct MenuBarPopupView: View {
 
     // MARK: - Edit Priority Button
 
-    /// Edit priority button — pencil ↔ checkmark, styled to match settingsButton
+    /// Edit priority button — pencil ↔ checkmark, styled to match settingsButton.
+    /// `GlassIconButtonStyle` supplies hover, press, and the lit active state.
     private var editPriorityButton: some View {
         Button(isEditingDevicePriority ? "Done reordering" : "Reorder devices",
                systemImage: isEditingDevicePriority ? "checkmark" : "pencil") {
             toggleDevicePriorityEdit()
         }
         .labelStyle(.iconOnly)
-        .buttonStyle(.plain)
+        .buttonStyle(GlassIconButtonStyle(isActive: isEditingDevicePriority))
         .font(.system(size: 12, weight: isEditingDevicePriority ? .bold : .regular))
-        .symbolRenderingMode(.hierarchical)
-        .foregroundStyle(DesignTokens.Colors.interactiveDefault)
-        .frame(
-            minWidth: DesignTokens.Dimensions.minTouchTarget,
-            minHeight: DesignTokens.Dimensions.minTouchTarget
-        )
-        .contentShape(Rectangle())
         .animation(.spring(response: 0.3, dampingFraction: 0.75), value: isEditingDevicePriority)
         .help(isEditingDevicePriority ? "Done reordering" : "Reorder devices")
     }
@@ -282,15 +276,9 @@ struct MenuBarPopupView: View {
             openSettingsWindow()
         }
         .labelStyle(.iconOnly)
-        .buttonStyle(.plain)
+        .buttonStyle(GlassIconButtonStyle())
         .font(.system(size: 12))
-        .symbolRenderingMode(.hierarchical)
-        .foregroundStyle(DesignTokens.Colors.interactiveDefault)
-        .frame(
-            minWidth: DesignTokens.Dimensions.minTouchTarget,
-            minHeight: DesignTokens.Dimensions.minTouchTarget
-        )
-        .contentShape(Rectangle())
+        .help("FineTune Settings")
     }
 
     /// Handles Escape key: closes EQ first, then dismisses the popup.
@@ -436,55 +424,28 @@ struct MenuBarPopupView: View {
 
     /// Icon-only pill toggle for switching between Output and Input devices
     private var deviceTabsHeader: some View {
-        let iconSize: CGFloat = 13
-        let buttonSize: CGFloat = 26
-
-        return HStack(spacing: 2) {
-            // Output (speaker) button
-            Button {
+        HStack(spacing: 2) {
+            DeviceTabButton(
+                icon: "speaker.wave.2.fill",
+                isSelected: !showingInputDevices,
+                helpText: "Output Devices",
+                namespace: deviceToggleNamespace
+            ) {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
                     showingInputDevices = false
                 }
-            } label: {
-                Image(systemName: "speaker.wave.2.fill")
-                    .font(.system(size: iconSize, weight: .medium))
-                    .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(showingInputDevices ? DesignTokens.Colors.textTertiary : DesignTokens.Colors.textPrimary)
-                    .frame(width: buttonSize, height: buttonSize)
-                    .background {
-                        if !showingInputDevices {
-                            RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
-                                .fill(DesignTokens.Colors.glassFillStrong)
-                                .matchedGeometryEffect(id: "deviceToggle", in: deviceToggleNamespace)
-                        }
-                    }
-                    .contentShape(Rectangle())
             }
-            .buttonStyle(.plain)
-            .help("Output Devices")
 
-            // Input (mic) button
-            Button {
+            DeviceTabButton(
+                icon: "mic.fill",
+                isSelected: showingInputDevices,
+                helpText: "Input Devices",
+                namespace: deviceToggleNamespace
+            ) {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
                     showingInputDevices = true
                 }
-            } label: {
-                Image(systemName: "mic.fill")
-                    .font(.system(size: iconSize, weight: .medium))
-                    .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(showingInputDevices ? DesignTokens.Colors.textPrimary : DesignTokens.Colors.textTertiary)
-                    .frame(width: buttonSize, height: buttonSize)
-                    .background {
-                        if showingInputDevices {
-                            RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
-                                .fill(DesignTokens.Colors.glassFillStrong)
-                                .matchedGeometryEffect(id: "deviceToggle", in: deviceToggleNamespace)
-                        }
-                    }
-                    .contentShape(Rectangle())
             }
-            .buttonStyle(.plain)
-            .help("Input Devices")
         }
         .padding(3)
         .background(
@@ -1449,6 +1410,75 @@ struct MenuBarPopupView: View {
                 end tell
                 """)
             script?.executeAndReturnError(nil)
+        }
+    }
+}
+
+// MARK: - Device Tab Button
+
+/// One segment of the Output/Input toggle. The selected segment carries the
+/// shared matched-geometry indicator — Liquid Glass on macOS 26+, the
+/// shipped `glassFillStrong` tile on earlier systems — and non-selected
+/// segments get a hover wash so the toggle reads as interactive.
+private struct DeviceTabButton: View {
+    let icon: String
+    let isSelected: Bool
+    let helpText: String
+    let namespace: Namespace.ID
+    let action: () -> Void
+
+    @State private var isHovered = false
+
+    private static let iconSize: CGFloat = 13
+    private static let buttonSize: CGFloat = 26
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: icon)
+                .font(.system(size: Self.iconSize, weight: .medium))
+                .symbolRenderingMode(.hierarchical)
+                .foregroundStyle(foregroundColor)
+                .frame(width: Self.buttonSize, height: Self.buttonSize)
+                .background {
+                    if isSelected {
+                        selectedIndicator
+                            .matchedGeometryEffect(id: "deviceToggle", in: namespace)
+                    } else if isHovered {
+                        RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
+                            .fill(DesignTokens.Colors.hoverSurface)
+                    }
+                }
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .onHover { hovering in
+            isHovered = hovering
+        }
+        .animation(DesignTokens.Animation.hover, value: isHovered)
+        .help(helpText)
+    }
+
+    private var foregroundColor: Color {
+        if isSelected {
+            return DesignTokens.Colors.textPrimary
+        } else if isHovered {
+            return DesignTokens.Colors.interactiveHover
+        } else {
+            return DesignTokens.Colors.textTertiary
+        }
+    }
+
+    @ViewBuilder
+    private var selectedIndicator: some View {
+        if #available(macOS 26.0, *) {
+            Color.clear
+                .glassEffect(
+                    .regular,
+                    in: RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
+                )
+        } else {
+            RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
+                .fill(DesignTokens.Colors.glassFillStrong)
         }
     }
 }
