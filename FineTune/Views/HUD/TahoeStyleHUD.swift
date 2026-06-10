@@ -110,14 +110,7 @@ struct TahoeStyleHUD: View {
         .padding(.top, 14)
         .padding(.bottom, 12)
         .frame(width: Self.frameWidth, height: Self.frameHeight)
-        .background {
-            RoundedRectangle(cornerRadius: Self.cornerRadius)
-                .fill(.regularMaterial)
-        }
-        .overlay {
-            RoundedRectangle(cornerRadius: Self.cornerRadius)
-                .strokeBorder(DesignTokens.Colors.hudBorder, lineWidth: 1)
-        }
+        .adaptiveGlassSurface(cornerRadius: Self.cornerRadius)
         .contentShape(RoundedRectangle(cornerRadius: Self.cornerRadius))
         .onHover { hovering in
             onHoverChange?(hovering)
