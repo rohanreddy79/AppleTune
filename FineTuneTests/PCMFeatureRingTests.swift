@@ -170,20 +170,26 @@ struct SPSCRingStressTests {
         let consumer = Thread {
             var lastSeed: UInt64 = 0
             var consumed: UInt64 = 0
+            func check(_ element: StressElement) {
+                consumed &+= 1
+                if !element.isConsistent {
+                    tally.tornReads.wrappingAdd(1, ordering: .relaxed)
+                }
+                // Drop-on-full may skip seeds, but FIFO order means
+                // consumed seeds must be strictly increasing.
+                if element.a <= lastSeed {
+                    tally.orderViolations.wrappingAdd(1, ordering: .relaxed)
+                }
+                lastSeed = element.a
+            }
             while true {
                 if let element = ring.pop() {
-                    consumed &+= 1
-                    if !element.isConsistent {
-                        tally.tornReads.wrappingAdd(1, ordering: .relaxed)
-                    }
-                    // Drop-on-full may skip seeds, but FIFO order means
-                    // consumed seeds must be strictly increasing.
-                    if element.a <= lastSeed {
-                        tally.orderViolations.wrappingAdd(1, ordering: .relaxed)
-                    }
-                    lastSeed = element.a
+                    check(element)
                 } else if tally.producerFinished.load(ordering: .acquiring) {
-                    // Producer is done and the ring is empty — drained.
+                    // The producer may push final elements between our empty
+                    // pop and the flag read above — drain that gap before
+                    // exiting or the accounting assertion undercounts.
+                    while let element = ring.pop() { check(element) }
                     break
                 }
             }
