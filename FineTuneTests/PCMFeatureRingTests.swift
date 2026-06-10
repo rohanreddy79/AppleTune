@@ -109,7 +109,10 @@ struct SPSCRingSemanticsTests {
 
     @Test("Interleaved push/pop keeps count and order consistent")
     func interleavedPushPop() {
-        let ring = SPSCRing<UInt64>(minimumCapacity: 8)
+        // Every second step pushes twice but pops once, so the surplus
+        // reaches 25 by step 50 — capacity must cover it or the ring's
+        // (correct) drop-on-full behavior breaks the expected sequence.
+        let ring = SPSCRing<UInt64>(minimumCapacity: 32)
         var next: UInt64 = 1
         var expected: UInt64 = 1
         for step in 1...50 {
@@ -126,6 +129,7 @@ struct SPSCRingSemanticsTests {
             expected &+= 1
         }
         #expect(expected == next)
+        #expect(ring.droppedCount == 0, "Nothing should have dropped at this capacity")
     }
 }
 
@@ -166,20 +170,26 @@ struct SPSCRingStressTests {
         let consumer = Thread {
             var lastSeed: UInt64 = 0
             var consumed: UInt64 = 0
+            func check(_ element: StressElement) {
+                consumed &+= 1
+                if !element.isConsistent {
+                    tally.tornReads.wrappingAdd(1, ordering: .relaxed)
+                }
+                // Drop-on-full may skip seeds, but FIFO order means
+                // consumed seeds must be strictly increasing.
+                if element.a <= lastSeed {
+                    tally.orderViolations.wrappingAdd(1, ordering: .relaxed)
+                }
+                lastSeed = element.a
+            }
             while true {
                 if let element = ring.pop() {
-                    consumed &+= 1
-                    if !element.isConsistent {
-                        tally.tornReads.wrappingAdd(1, ordering: .relaxed)
-                    }
-                    // Drop-on-full may skip seeds, but FIFO order means
-                    // consumed seeds must be strictly increasing.
-                    if element.a <= lastSeed {
-                        tally.orderViolations.wrappingAdd(1, ordering: .relaxed)
-                    }
-                    lastSeed = element.a
+                    check(element)
                 } else if tally.producerFinished.load(ordering: .acquiring) {
-                    // Producer is done and the ring is empty — drained.
+                    // The producer may push final elements between our empty
+                    // pop and the flag read above — drain that gap before
+                    // exiting or the accounting assertion undercounts.
+                    while let element = ring.pop() { check(element) }
                     break
                 }
             }
@@ -261,7 +271,9 @@ struct AudioFeatureFrameTests {
 
     @Test("Silence: all measurements are zero")
     func silence() {
-        let samples = [Float](repeating: 0, count: 128)
+        // 128 frames × 2 interleaved channels — the buffer must hold
+        // frameCount × channelCount samples or measure() reads past its end.
+        let samples = [Float](repeating: 0, count: 128 * 2)
         let frame = samples.withUnsafeBufferPointer { buffer in
             AudioFeatureFrame.measure(
                 samples: buffer.baseAddress!,
