@@ -81,23 +81,35 @@ extension View {
 /// The shadow uses `DesignTokens.Colors.cardShadow`. Shadows are a depth
 /// cue, not a chromatic surface, and remain readable in both modes without
 /// an appearance-aware token.
+///
+/// On macOS 26+ the card renders Apple's Liquid Glass instead: the system
+/// effect carries its own depth, edge highlight, and adaptive contrast, so
+/// the legacy fill + hairline + shadow are omitted on that path.
 struct LiftedCardBackgroundModifier: ViewModifier {
     func body(content: Content) -> some View {
-        content
-            .background {
-                RoundedRectangle(cornerRadius: DesignTokens.Dimensions.rowRadius)
-                    .fill(DesignTokens.Colors.eqCardBackground)
-            }
-            .overlay {
-                RoundedRectangle(cornerRadius: DesignTokens.Dimensions.rowRadius)
-                    .strokeBorder(DesignTokens.Colors.eqCardBorder, lineWidth: 0.5)
-            }
-            .shadow(
-                color: DesignTokens.Colors.cardShadow,
-                radius: 1.5,
-                x: 0,
-                y: 0.5
-            )
+        if #available(macOS 26.0, *) {
+            content
+                .glassEffect(
+                    .regular,
+                    in: RoundedRectangle(cornerRadius: DesignTokens.Dimensions.cardRadius)
+                )
+        } else {
+            content
+                .background {
+                    RoundedRectangle(cornerRadius: DesignTokens.Dimensions.cardRadius)
+                        .fill(DesignTokens.Colors.eqCardBackground)
+                }
+                .overlay {
+                    RoundedRectangle(cornerRadius: DesignTokens.Dimensions.cardRadius)
+                        .strokeBorder(DesignTokens.Colors.eqCardBorder, lineWidth: 0.5)
+                }
+                .shadow(
+                    color: DesignTokens.Colors.cardShadow,
+                    radius: 1.5,
+                    x: 0,
+                    y: 0.5
+                )
+        }
     }
 }
 

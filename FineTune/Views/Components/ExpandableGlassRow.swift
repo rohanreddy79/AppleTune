@@ -40,6 +40,17 @@ struct ExpandableGlassRow<Header: View, ExpandedContent: View>: View {
                 .padding(.vertical, 1)
                 .allowsHitTesting(false)
         }
+        // Soft hairline pairs with hoverSurface so the active row reads as
+        // a glass tile. Inset matches the fill's 1pt vertical padding.
+        .overlay {
+            RoundedRectangle(cornerRadius: DesignTokens.Dimensions.rowRadius)
+                .strokeBorder(
+                    isHovered || isExpanded || isFocused ? DesignTokens.Colors.glassRowBorderHover : Color.clear,
+                    lineWidth: 0.5
+                )
+                .padding(.vertical, 1)
+                .allowsHitTesting(false)
+        }
         .onHover { hovering in
             isHovered = hovering
         }

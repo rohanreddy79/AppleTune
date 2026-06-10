@@ -11,10 +11,19 @@ struct HoverableRowModifier: ViewModifier {
         content
             .padding(.horizontal, DesignTokens.Spacing.sm)
             .padding(.vertical, 6)
-            // Flat at rest; hover or keyboard focus reveals hoverSurface only.
+            // Flat at rest; hover or keyboard focus reveals hoverSurface
+            // plus a soft hairline so the active row reads as a glass tile.
             .background(
                 RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
                     .fill(isHovered || isFocused ? DesignTokens.Colors.hoverSurface : Color.clear)
+                    .allowsHitTesting(false)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
+                    .strokeBorder(
+                        isHovered || isFocused ? DesignTokens.Colors.glassRowBorderHover : Color.clear,
+                        lineWidth: 0.5
+                    )
                     .allowsHitTesting(false)
             )
             .onHover { hovering in

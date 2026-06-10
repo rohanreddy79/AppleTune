@@ -145,13 +145,15 @@ enum DesignTokens {
         /// Hover background for tappable rows. With flat-row design (no
         /// resting fill or border), this is the primary "this row is active"
         /// affordance, so it needs to read clearly without being heavy.
-        /// Light bumped from 0.08 → 0.115 to remain unambiguous on the
-        /// new whiter glass without competing with the selected-row
-        /// indicator. Matches the macOS-native System Settings pattern.
+        /// Light bumped 0.08 → 0.115 → 0.13 and dark 0.07 → 0.09 for the
+        /// glass redesign: the wash pairs with the new hover hairline
+        /// (`glassRowBorderHover`) so the active row reads instantly without
+        /// competing with the selected-row indicator. Matches the
+        /// macOS-native System Settings pattern.
         static let hoverSurface = dynamicColor(
             name: "hoverSurface",
-            light: NSColor.black.withAlphaComponent(0.115),
-            dark: NSColor.white.withAlphaComponent(0.07)
+            light: NSColor.black.withAlphaComponent(0.13),
+            dark: NSColor.white.withAlphaComponent(0.09)
         )
 
         /// Default row fill. Transparent — rows blend with the popup

@@ -35,6 +35,27 @@ struct LiquidGlassSlider: View {
         (value - range.lowerBound) / (range.upperBound - range.lowerBound)
     }
 
+    /// Native-slider visibility. On macOS 26+ the native thumb is always
+    /// suppressed (a real Liquid Glass thumb is drawn separately); on
+    /// earlier systems the native thumb shows on hover/drag as shipped.
+    private var nativeSliderOpacity: Double {
+        if #available(macOS 26.0, *) {
+            return 0.01  // Interactive but never visible
+        }
+        return showThumb ? 1 : 0.01
+    }
+
+    /// Horizontal center of the thumb for a normalized value, keeping the
+    /// thumb fully inside the track bounds (mirrors AppKit slider geometry).
+    static func thumbCenterX(
+        normalizedValue: Double,
+        trackWidth: CGFloat,
+        thumbWidth: CGFloat
+    ) -> CGFloat {
+        let clamped = min(max(normalizedValue, 0), 1)
+        return thumbWidth / 2 + (trackWidth - thumbWidth) * clamped
+    }
+
     var body: some View {
         GeometryReader { geo in
             ZStack {
@@ -66,15 +87,39 @@ struct LiquidGlassSlider: View {
                     .allowsHitTesting(false)
                 }
 
-                // Native SwiftUI Slider - gets Liquid Glass thumb on macOS 26+
-                // Thumb only visible on hover/drag
+                // Native SwiftUI Slider drives the interaction; visuals are
+                // suppressed on macOS 26+ in favor of the glass thumb below.
                 Slider(value: $value, in: range) { editing in
                     isEditing = editing
                     onEditingChanged?(editing)
                 }
                 .controlSize(.mini)
                 .tint(.clear)  // Hide native track, we draw our own
-                .opacity(showThumb ? 1 : 0.01)  // Nearly invisible when not hovered, but still interactive
+                .opacity(nativeSliderOpacity)
+
+                // Real Liquid Glass thumb (macOS 26+): interactive glass
+                // capsule that tracks the value, shown on hover/drag like
+                // the legacy thumb.
+                if #available(macOS 26.0, *) {
+                    Capsule()
+                        .fill(.clear)
+                        .glassEffect(.regular.interactive(), in: Capsule())
+                        .frame(
+                            width: DesignTokens.Dimensions.sliderThumbWidth,
+                            height: DesignTokens.Dimensions.sliderThumbHeight
+                        )
+                        .position(
+                            x: Self.thumbCenterX(
+                                normalizedValue: normalizedValue,
+                                trackWidth: geo.size.width,
+                                thumbWidth: DesignTokens.Dimensions.sliderThumbWidth
+                            ),
+                            y: geo.size.height / 2
+                        )
+                        .opacity(showThumb ? 1 : 0)
+                        .allowsHitTesting(false)
+                        .animation(DesignTokens.Animation.hover, value: showThumb)
+                }
             }
         }
         .frame(height: DesignTokens.Dimensions.sliderThumbHeight)

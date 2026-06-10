@@ -133,13 +133,14 @@ struct DesignTokensDynamicResolutionTests {
 
     @Test("hoverSurface resolves correctly in light and dark")
     func hoverSurface() {
-        // Light bumped from 0.08 → 0.115: clearly visible row hover wash
-        // on the new whiter glass without competing with the selected row.
+        // Glass redesign: light 0.115 → 0.13 and dark 0.07 → 0.09 so the
+        // hover wash pairs with the new glassRowBorderHover hairline and
+        // reads instantly without competing with the selected row.
         expectColor(DesignTokens.Colors.hoverSurface,
-                    equals: NSColor.black.withAlphaComponent(0.115),
+                    equals: NSColor.black.withAlphaComponent(0.13),
                     in: Self.aqua)
         expectColor(DesignTokens.Colors.hoverSurface,
-                    equals: NSColor.white.withAlphaComponent(0.07),
+                    equals: NSColor.white.withAlphaComponent(0.09),
                     in: Self.darkAqua)
     }
 
