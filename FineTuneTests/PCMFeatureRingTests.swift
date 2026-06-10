@@ -265,7 +265,9 @@ struct AudioFeatureFrameTests {
 
     @Test("Silence: all measurements are zero")
     func silence() {
-        let samples = [Float](repeating: 0, count: 128)
+        // 128 frames × 2 interleaved channels — the buffer must hold
+        // frameCount × channelCount samples or measure() reads past its end.
+        let samples = [Float](repeating: 0, count: 128 * 2)
         let frame = samples.withUnsafeBufferPointer { buffer in
             AudioFeatureFrame.measure(
                 samples: buffer.baseAddress!,
