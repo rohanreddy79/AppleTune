@@ -43,10 +43,22 @@ extension View {
     /// dark via DesignTokens; the underlying NSVisualEffectView uses the
     /// `.popover` material so it tracks system appearance natively.
     /// Name kept for source compatibility; rename pending a follow-up sweep.
+    ///
+    /// On macOS 26+ the container renders Apple's Liquid Glass instead: the
+    /// system effect carries its own adaptive tint and contrast, so the
+    /// legacy `popupOverlay` wash (which would mute the glass) is omitted on
+    /// that path. Earlier systems keep the exact treatment shipped today.
+    @ViewBuilder
     func darkGlassBackground() -> some View {
-        self
-            .background(Color.popupBackgroundOverlay)
-            .background(VisualEffectBackground(material: .popover, blendingMode: .behindWindow))
+        if #available(macOS 26.0, *) {
+            self.background {
+                Color.clear.glassEffect(.regular, in: Rectangle())
+            }
+        } else {
+            self
+                .background(Color.popupBackgroundOverlay)
+                .background(VisualEffectBackground(material: .popover, blendingMode: .behindWindow))
+        }
     }
 
     /// Applies the lifted-card background used by the EQ panel.
