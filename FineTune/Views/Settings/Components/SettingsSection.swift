@@ -15,18 +15,27 @@ struct SettingsSection<Content: View>: View {
         VStack(alignment: .leading, spacing: 10) {
             if let title {
                 Text(title)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(DesignTokens.Typography.cardHeader)
                     .foregroundStyle(DesignTokens.Colors.textPrimary)
-                    .padding(.horizontal, 4)
+                    .padding(.horizontal, DesignTokens.Spacing.xs)
             }
             VStack(spacing: 0) {
                 content()
             }
-            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            // Lifted-card fill matches the popup's EQ card so every grouped
+            // surface in the app shares one treatment.
+            .background(DesignTokens.Colors.eqCardBackground)
+            .clipShape(RoundedRectangle(cornerRadius: DesignTokens.Dimensions.cardRadius, style: .continuous))
             .overlay {
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                RoundedRectangle(cornerRadius: DesignTokens.Dimensions.cardRadius, style: .continuous)
                     .strokeBorder(Color(nsColor: .separatorColor), lineWidth: 0.5)
             }
+            .shadow(
+                color: DesignTokens.Colors.cardShadow,
+                radius: 1.5,
+                x: 0,
+                y: 0.5
+            )
         }
     }
 }

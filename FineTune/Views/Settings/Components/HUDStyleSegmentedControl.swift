@@ -28,6 +28,14 @@ private struct HUDStyleOption: View {
     let isSelected: Bool
     let onSelect: () -> Void
 
+    @State private var isHovered = false
+
+    private var fillColor: Color {
+        if isSelected { return DesignTokens.Colors.accentPrimary.opacity(0.15) }
+        if isHovered { return DesignTokens.Colors.hoverSurface }
+        return .clear
+    }
+
     private var label: String {
         switch style {
         case .tahoe: return "Tahoe"
@@ -42,15 +50,17 @@ private struct HUDStyleOption: View {
                 .frame(width: 60, height: 26)
                 .contentShape(Rectangle())
                 .background {
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(isSelected ? DesignTokens.Colors.accentPrimary.opacity(0.15) : Color.clear)
+                    RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
+                        .fill(fillColor)
                 }
                 .overlay {
-                    RoundedRectangle(cornerRadius: 6)
+                    RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
                         .stroke(isSelected ? DesignTokens.Colors.accentPrimary : Color.clear, lineWidth: 1.5)
                 }
         }
         .buttonStyle(.plain)
+        .onHover { isHovered = $0 }
+        .animation(DesignTokens.Animation.hover, value: isHovered)
         .accessibilityLabel(label)
     }
 
@@ -64,10 +74,10 @@ private struct HUDStyleOption: View {
 
     private var tahoeThumbnail: some View {
         let tint = isSelected ? DesignTokens.Colors.accentPrimary : DesignTokens.Colors.textSecondary
-        return RoundedRectangle(cornerRadius: 8)
-            .fill(Color.primary.opacity(0.08))
+        return RoundedRectangle(cornerRadius: DesignTokens.Dimensions.controlRadius)
+            .fill(DesignTokens.Colors.pickerBackground)
             .overlay {
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: DesignTokens.Dimensions.controlRadius)
                     .stroke(tint.opacity(0.5), lineWidth: 0.75)
             }
             .overlay(alignment: .leading) {
@@ -90,11 +100,11 @@ private struct HUDStyleOption: View {
 
     private var classicThumbnail: some View {
         let tint = isSelected ? DesignTokens.Colors.accentPrimary : DesignTokens.Colors.textSecondary
-        return RoundedRectangle(cornerRadius: 5)
-            .fill(Color.primary.opacity(0.08))
+        return RoundedRectangle(cornerRadius: DesignTokens.Dimensions.pickerItemRadius)
+            .fill(DesignTokens.Colors.pickerBackground)
             .frame(width: 22, height: 22)
             .overlay {
-                RoundedRectangle(cornerRadius: 5)
+                RoundedRectangle(cornerRadius: DesignTokens.Dimensions.pickerItemRadius)
                     .stroke(tint.opacity(0.5), lineWidth: 0.75)
             }
             .overlay {
