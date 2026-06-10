@@ -145,13 +145,15 @@ enum DesignTokens {
         /// Hover background for tappable rows. With flat-row design (no
         /// resting fill or border), this is the primary "this row is active"
         /// affordance, so it needs to read clearly without being heavy.
-        /// Light bumped from 0.08 → 0.115 to remain unambiguous on the
-        /// new whiter glass without competing with the selected-row
-        /// indicator. Matches the macOS-native System Settings pattern.
+        /// Light bumped 0.08 → 0.115 → 0.13 and dark 0.07 → 0.09 for the
+        /// glass redesign: the wash pairs with the new hover hairline
+        /// (`glassRowBorderHover`) so the active row reads instantly without
+        /// competing with the selected-row indicator. Matches the
+        /// macOS-native System Settings pattern.
         static let hoverSurface = dynamicColor(
             name: "hoverSurface",
-            light: NSColor.black.withAlphaComponent(0.115),
-            dark: NSColor.white.withAlphaComponent(0.07)
+            light: NSColor.black.withAlphaComponent(0.13),
+            dark: NSColor.white.withAlphaComponent(0.09)
         )
 
         /// Default row fill. Transparent — rows blend with the popup
@@ -243,6 +245,17 @@ enum DesignTokens {
             light: NSColor.black.withAlphaComponent(0.65),
             dark: NSColor.white.withAlphaComponent(0.40)
         )
+
+        // MARK: Shadows (depth cues - NOT themed)
+
+        /// Soft lift shadow under cards (EQ panel, settings sections).
+        /// Shadows are a depth cue, not a chromatic surface, and remain
+        /// readable in both modes without an appearance-aware token.
+        static let cardShadow: Color = .black.opacity(0.06)
+
+        /// Drop shadow under knob-style slider thumbs (EQ band sliders).
+        /// Always dark so the white thumb separates from any track color.
+        static let thumbShadow: Color = .black.opacity(0.4)
 
         // MARK: VU Meter (Professional audio standard - NOT themed)
 
@@ -400,6 +413,18 @@ enum DesignTokens {
 
         /// Corner radius for buttons/pickers
         static let buttonRadius: CGFloat = 6
+
+        /// Corner radius for lifted cards (EQ panel, settings sections)
+        static let cardRadius: CGFloat = 10
+
+        /// Corner radius for floating control surfaces (dropdown popovers)
+        static let controlRadius: CGFloat = 8
+
+        /// Corner radius for menu/picker item hover fills
+        static let pickerItemRadius: CGFloat = 5
+
+        /// Corner radius for inline editable fields (percentage pill)
+        static let fieldRadius: CGFloat = 4
 
         /// App/device icon size
         static let iconSize: CGFloat = 22

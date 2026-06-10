@@ -7,6 +7,8 @@ struct SettingsRow<Trailing: View>: View {
     private let description: String?
     @ViewBuilder private let trailing: () -> Trailing
 
+    @State private var isHovered = false
+
     init(
         _ title: String,
         description: String? = nil,
@@ -18,25 +20,32 @@ struct SettingsRow<Trailing: View>: View {
     }
 
     var body: some View {
-        HStack(alignment: .center, spacing: 16) {
-            VStack(alignment: .leading, spacing: 2) {
+        HStack(alignment: .center, spacing: DesignTokens.Spacing.lg) {
+            VStack(alignment: .leading, spacing: DesignTokens.Spacing.xxs) {
                 Text(title)
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(DesignTokens.Colors.textPrimary)
                 if let description {
                     Text(description)
-                        .font(.system(size: 11))
+                        .font(DesignTokens.Typography.rowDescription)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
-            Spacer(minLength: 16)
+            Spacer(minLength: DesignTokens.Spacing.lg)
             trailing()
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.horizontal, DesignTokens.Spacing.lg)
+        .padding(.vertical, DesignTokens.Spacing.md)
         .frame(minHeight: 52)
         .contentShape(Rectangle())
+        // Hover wash matches the popup rows; the enclosing SettingsSection
+        // clips it to the card shape.
+        .background(isHovered ? DesignTokens.Colors.hoverSurface : Color.clear)
+        .onHover { hovering in
+            isHovered = hovering
+        }
+        .animation(DesignTokens.Animation.hover, value: isHovered)
     }
 }
 
@@ -46,6 +55,6 @@ struct SettingsRow<Trailing: View>: View {
 struct SettingsRowDivider: View {
     var body: some View {
         Divider()
-            .padding(.leading, 16)
+            .padding(.leading, DesignTokens.Spacing.lg)
     }
 }

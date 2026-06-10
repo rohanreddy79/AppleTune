@@ -37,16 +37,10 @@ struct AppEditRow: View {
                 } label: {
                     Image(systemName: isPinned ? "pin.fill" : "pin")
                         .font(.system(size: 12))
-                        .symbolRenderingMode(.hierarchical)
                         .foregroundStyle(pinColor)
-                        .frame(
-                            minWidth: DesignTokens.Dimensions.minTouchTarget,
-                            minHeight: DesignTokens.Dimensions.minTouchTarget
-                        )
-                        .contentShape(Rectangle())
                         .scaleEffect(isPinHovered ? 1.1 : 1.0)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(GlassIconButtonStyle())
                 .onHover { isPinHovered = $0 }
                 .help(isPinned ? "Unpin app" : "Pin app")
                 .animation(DesignTokens.Animation.quick, value: isPinHovered)
@@ -58,16 +52,10 @@ struct AppEditRow: View {
             } label: {
                 Image(systemName: isIgnored ? "eye.slash" : "eye")
                     .font(.system(size: 13))
-                    .symbolRenderingMode(.hierarchical)
                     .foregroundStyle(eyeColor)
-                    .frame(
-                        minWidth: DesignTokens.Dimensions.minTouchTarget,
-                        minHeight: DesignTokens.Dimensions.minTouchTarget
-                    )
-                    .contentShape(Rectangle())
                     .scaleEffect(isEyeHovered ? 1.1 : 1.0)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(GlassIconButtonStyle())
             .onHover { isEyeHovered = $0 }
             .help(isIgnored ? "Stop ignoring" : "Ignore app")
             .animation(DesignTokens.Animation.quick, value: isEyeHovered)

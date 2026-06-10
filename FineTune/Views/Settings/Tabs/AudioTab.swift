@@ -24,12 +24,12 @@ struct AudioTab: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: DesignTokens.Spacing.xxl) {
                 volumeSection
                 devicesSection
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 20)
+            .padding(.horizontal, DesignTokens.Spacing.xl)
+            .padding(.vertical, DesignTokens.Spacing.xl)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .scrollIndicators(.never)

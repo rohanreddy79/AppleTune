@@ -122,10 +122,10 @@ struct EQPanelView: View {
             .allowsHitTesting(settings.isEnabled)
             .animation(.easeInOut(duration: 0.2), value: settings.isEnabled)
         }
-        .padding(.horizontal, 12)
+        .padding(.horizontal, DesignTokens.Spacing.md)
         .padding(.vertical, 10)
         .background {
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: DesignTokens.Dimensions.cardRadius)
                 .fill(DesignTokens.Colors.recessedBackground)
         }
         .padding(.horizontal, 2)
@@ -147,10 +147,8 @@ struct EQPanelView: View {
         } label: {
             Image(systemName: "plus.circle")
                 .font(.system(size: 13))
-                .symbolRenderingMode(.hierarchical)
-                .foregroundStyle(DesignTokens.Colors.interactiveDefault)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(GlassIconButtonStyle())
         .help("Save current EQ as preset")
         .accessibilityLabel("Save current EQ curve as a new preset")
     }
@@ -197,7 +195,7 @@ struct EQPanelView: View {
         .padding(.vertical, 4)
         .background {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
-                .fill(.regularMaterial)
+                .fill(DesignTokens.Materials.controlSurface)
         }
         .overlay {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
@@ -238,10 +236,8 @@ struct EQPanelView: View {
         } label: {
             Image(systemName: "pencil")
                 .font(.system(size: 12))
-                .symbolRenderingMode(.hierarchical)
-                .foregroundStyle(DesignTokens.Colors.interactiveDefault)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(GlassIconButtonStyle())
         .help("Rename preset")
         .accessibilityLabel("Rename current preset")
     }
@@ -288,7 +284,7 @@ struct EQPanelView: View {
         .padding(.vertical, 4)
         .background {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
-                .fill(.regularMaterial)
+                .fill(DesignTokens.Materials.controlSurface)
         }
         .overlay {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)

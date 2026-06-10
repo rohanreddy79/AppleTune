@@ -28,6 +28,14 @@ private struct IconOption: View {
     let isSelected: Bool
     let onSelect: () -> Void
 
+    @State private var isHovered = false
+
+    private var fillColor: Color {
+        if isSelected { return DesignTokens.Colors.accentPrimary.opacity(0.15) }
+        if isHovered { return DesignTokens.Colors.hoverSurface }
+        return .clear
+    }
+
     var body: some View {
         Button(action: onSelect) {
             Group {
@@ -41,19 +49,21 @@ private struct IconOption: View {
                         .frame(width: 14, height: 14)
                 }
             }
-            .foregroundStyle(isSelected ? DesignTokens.Colors.accentPrimary : DesignTokens.Colors.textSecondary)
+            .foregroundStyle(isSelected ? DesignTokens.Colors.accentPrimary : (isHovered ? DesignTokens.Colors.textPrimary : DesignTokens.Colors.textSecondary))
             .frame(width: 30, height: 30)
             .contentShape(Rectangle())
             .background {
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(isSelected ? DesignTokens.Colors.accentPrimary.opacity(0.15) : Color.clear)
+                RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
+                    .fill(fillColor)
             }
             .overlay {
-                RoundedRectangle(cornerRadius: 6)
+                RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
                     .stroke(isSelected ? DesignTokens.Colors.accentPrimary : Color.clear, lineWidth: 1.5)
             }
         }
         .buttonStyle(.plain)
+        .onHover { isHovered = $0 }
+        .animation(DesignTokens.Animation.hover, value: isHovered)
         .accessibilityLabel(style.rawValue)
     }
 }

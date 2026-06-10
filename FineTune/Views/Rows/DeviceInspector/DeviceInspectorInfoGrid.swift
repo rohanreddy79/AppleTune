@@ -125,7 +125,7 @@ private struct SampleRatePickerValue: View {
 
     private var pickerBackground: some View {
         RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
-            .fill(.regularMaterial)
+            .fill(DesignTokens.Materials.controlSurface)
     }
 
     private var pickerBorder: some View {

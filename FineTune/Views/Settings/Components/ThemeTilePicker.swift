@@ -26,18 +26,22 @@ private struct ThemeTile: View {
     let onTap: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var isHovered = false
+
+    private var borderColor: Color {
+        if isSelected { return .accentColor }
+        if isHovered { return DesignTokens.Colors.glassBorderHover }
+        return Color(nsColor: .separatorColor)
+    }
 
     var body: some View {
         VStack(spacing: 6) {
             ThemePreviewMockup(preference: preference)
                 .frame(width: 72, height: 46)
-                .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius, style: .continuous))
                 .overlay {
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .strokeBorder(
-                            isSelected ? Color.accentColor : Color(nsColor: .separatorColor),
-                            lineWidth: isSelected ? 2 : 0.5
-                        )
+                    RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius, style: .continuous)
+                        .strokeBorder(borderColor, lineWidth: isSelected ? 2 : 0.5)
                 }
 
             Text(preference.description)
@@ -46,7 +50,9 @@ private struct ThemeTile: View {
         }
         .contentShape(Rectangle())
         .onTapGesture(perform: onTap)
+        .onHover { isHovered = $0 }
         .animation(reduceMotion ? nil : .easeOut(duration: 0.15), value: isSelected)
+        .animation(reduceMotion ? nil : DesignTokens.Animation.hover, value: isHovered)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
         .accessibilityLabel(Text(preference.description))
@@ -133,18 +139,22 @@ private struct PopupSizeTile: View {
     let onTap: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var isHovered = false
+
+    private var borderColor: Color {
+        if isSelected { return .accentColor }
+        if isHovered { return DesignTokens.Colors.glassBorderHover }
+        return Color(nsColor: .separatorColor)
+    }
 
     var body: some View {
         VStack(spacing: 6) {
             PopupSizeMockup(size: size)
                 .frame(width: 72, height: 46)
-                .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius, style: .continuous))
                 .overlay {
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .strokeBorder(
-                            isSelected ? Color.accentColor : Color(nsColor: .separatorColor),
-                            lineWidth: isSelected ? 2 : 0.5
-                        )
+                    RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius, style: .continuous)
+                        .strokeBorder(borderColor, lineWidth: isSelected ? 2 : 0.5)
                 }
 
             Text(size.description)
@@ -153,7 +163,9 @@ private struct PopupSizeTile: View {
         }
         .contentShape(Rectangle())
         .onTapGesture(perform: onTap)
+        .onHover { isHovered = $0 }
         .animation(reduceMotion ? nil : .easeOut(duration: 0.15), value: isSelected)
+        .animation(reduceMotion ? nil : DesignTokens.Animation.hover, value: isHovered)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
         .accessibilityLabel(Text(size.description))
@@ -205,7 +217,7 @@ private struct PopupSizeMockup: View {
                 .fill(Color(nsColor: .controlBackgroundColor))
                 .overlay {
                     RoundedRectangle(cornerRadius: 5, style: .continuous)
-                        .strokeBorder(Color.black.opacity(0.12), lineWidth: 0.5)
+                        .strokeBorder(DesignTokens.Colors.glassBorder, lineWidth: 0.5)
                 }
                 .frame(width: popupWidth)
                 .overlay {

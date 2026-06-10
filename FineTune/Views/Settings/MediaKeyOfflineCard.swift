@@ -48,7 +48,7 @@ struct MediaKeyOfflineCard: View {
         .padding(.vertical, DesignTokens.Spacing.xs)
         .background {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
-                .fill(.ultraThinMaterial)
+                .fill(DesignTokens.Materials.cardSurface)
         }
         .overlay {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)

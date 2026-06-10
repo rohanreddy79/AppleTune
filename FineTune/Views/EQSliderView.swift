@@ -96,7 +96,7 @@ struct EQSliderView: View {
                                     .frame(width: thumbSize * 0.35, height: thumbSize * 0.35)
                             }
                             .frame(width: thumbSize, height: thumbSize)
-                            .shadow(color: .black.opacity(0.4), radius: 2, y: 1)
+                            .shadow(color: DesignTokens.Colors.thumbShadow, radius: 2, y: 1)
                             .position(x: geo.size.width / 2, y: thumbY)
 
                             // dB value label (appears during drag)
