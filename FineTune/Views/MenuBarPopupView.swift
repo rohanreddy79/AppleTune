@@ -692,9 +692,10 @@ struct MenuBarPopupView: View {
         )
         .draggable(device.uid) {
             Text(device.name)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 6))
+                .padding(.horizontal, DesignTokens.Spacing.sm)
+                .padding(.vertical, DesignTokens.Spacing.xs)
+                .background(DesignTokens.Materials.cardSurface,
+                            in: RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius))
         }
         .dropDestination(for: String.self) { droppedUIDs, _ in
             guard let droppedUID = droppedUIDs.first,

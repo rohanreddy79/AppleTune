@@ -106,9 +106,9 @@ struct TahoeStyleHUD: View {
                     .frame(width: Self.percentageWidth, alignment: .trailing)
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.top, 14)
-        .padding(.bottom, 12)
+        .padding(.horizontal, DesignTokens.Spacing.lg)
+        .padding(.top, DesignTokens.Spacing.md)
+        .padding(.bottom, DesignTokens.Spacing.md)
         .frame(width: Self.frameWidth, height: Self.frameHeight)
         .adaptiveGlassSurface(cornerRadius: Self.cornerRadius)
         .contentShape(RoundedRectangle(cornerRadius: Self.cornerRadius))

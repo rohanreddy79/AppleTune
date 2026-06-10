@@ -54,7 +54,7 @@ struct PairedDeviceRow: View {
                 .padding(.vertical, DesignTokens.Spacing.xxs + 1)
                 .background(
                     RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
-                        .fill(.regularMaterial)
+                        .fill(DesignTokens.Materials.controlSurface)
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)

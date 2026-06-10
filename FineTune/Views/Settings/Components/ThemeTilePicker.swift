@@ -205,7 +205,7 @@ private struct PopupSizeMockup: View {
                 .fill(Color(nsColor: .controlBackgroundColor))
                 .overlay {
                     RoundedRectangle(cornerRadius: 5, style: .continuous)
-                        .strokeBorder(Color.black.opacity(0.12), lineWidth: 0.5)
+                        .strokeBorder(DesignTokens.Colors.glassBorder, lineWidth: 0.5)
                 }
                 .frame(width: popupWidth)
                 .overlay {

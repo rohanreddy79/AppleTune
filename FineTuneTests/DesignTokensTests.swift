@@ -4,6 +4,7 @@
 
 import Testing
 import SwiftUI
+import AppKit
 @testable import FineTune
 
 // MARK: - Spacing
@@ -73,6 +74,27 @@ struct DesignTokensDimensionTests {
         #expect(DesignTokens.Dimensions.cornerRadius > 0)
         #expect(DesignTokens.Dimensions.rowRadius > 0)
         #expect(DesignTokens.Dimensions.buttonRadius > 0)
+        #expect(DesignTokens.Dimensions.cardRadius > 0)
+        #expect(DesignTokens.Dimensions.controlRadius > 0)
+        #expect(DesignTokens.Dimensions.pickerItemRadius > 0)
+        #expect(DesignTokens.Dimensions.fieldRadius > 0)
+    }
+
+    @Test("Surface radii values match the shipped design")
+    func surfaceRadiiValues() {
+        #expect(DesignTokens.Dimensions.cardRadius == 10)
+        #expect(DesignTokens.Dimensions.controlRadius == 8)
+        #expect(DesignTokens.Dimensions.pickerItemRadius == 5)
+        #expect(DesignTokens.Dimensions.fieldRadius == 4)
+    }
+
+    @Test("Radius hierarchy: field < pickerItem < button < control < card ≤ popup")
+    func radiusHierarchy() {
+        #expect(DesignTokens.Dimensions.fieldRadius < DesignTokens.Dimensions.pickerItemRadius)
+        #expect(DesignTokens.Dimensions.pickerItemRadius < DesignTokens.Dimensions.buttonRadius)
+        #expect(DesignTokens.Dimensions.buttonRadius < DesignTokens.Dimensions.controlRadius)
+        #expect(DesignTokens.Dimensions.controlRadius < DesignTokens.Dimensions.cardRadius)
+        #expect(DesignTokens.Dimensions.cardRadius <= DesignTokens.Dimensions.cornerRadius)
     }
 
     @Test("Slider dimensions are positive")
@@ -98,6 +120,31 @@ struct DesignTokensDimensionTests {
     @Test("Min touch target is at least 16pt (Apple HIG minimum)")
     func minTouchTarget() {
         #expect(DesignTokens.Dimensions.minTouchTarget >= 16)
+    }
+}
+
+// MARK: - Shadows
+
+@Suite("DesignTokens — Shadow tokens")
+struct DesignTokensShadowTests {
+
+    @Test("cardShadow is the shipped soft lift shadow")
+    func cardShadow() {
+        #expect(DesignTokens.Colors.cardShadow == Color.black.opacity(0.06))
+    }
+
+    @Test("thumbShadow is the shipped knob drop shadow")
+    func thumbShadow() {
+        #expect(DesignTokens.Colors.thumbShadow == Color.black.opacity(0.4))
+    }
+
+    @Test("Shadows stay subtle (card) and readable (thumb)")
+    func shadowOrdering() {
+        // Both are static black-alpha colors; the thumb shadow must be the
+        // stronger of the two so the knob separates from any track color.
+        let card = NSColor(DesignTokens.Colors.cardShadow).alphaComponent
+        let thumb = NSColor(DesignTokens.Colors.thumbShadow).alphaComponent
+        #expect(card < thumb)
     }
 }
 

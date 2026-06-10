@@ -241,7 +241,7 @@ struct DevicePicker: View {
         .buttonStyle(.plain)
         .background {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
-                .fill(.regularMaterial)
+                .fill(DesignTokens.Materials.controlSurface)
         }
         .overlay {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
@@ -279,9 +279,9 @@ struct DevicePicker: View {
 
     private var iconOnlyBackgroundFill: Color {
         if isExpanded {
-            return Color.primary.opacity(0.12)
+            return DesignTokens.Colors.pickerHover
         } else if isButtonHovered {
-            return Color.primary.opacity(0.08)
+            return DesignTokens.Colors.pickerBackground
         } else {
             return Color.clear
         }

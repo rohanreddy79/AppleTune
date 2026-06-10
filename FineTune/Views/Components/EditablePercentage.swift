@@ -76,16 +76,16 @@ struct EditablePercentage: View {
         .background {
             if isVisuallyEditing {
                 // Subtle pill background when editing
-                RoundedRectangle(cornerRadius: 4)
+                RoundedRectangle(cornerRadius: DesignTokens.Dimensions.fieldRadius)
                     .fill(DesignTokens.Colors.accentPrimary.opacity(0.12))
                     .overlay {
-                        RoundedRectangle(cornerRadius: 4)
+                        RoundedRectangle(cornerRadius: DesignTokens.Dimensions.fieldRadius)
                             .strokeBorder(DesignTokens.Colors.accentPrimary.opacity(0.4), lineWidth: 1)
                     }
             } else if isHovered {
                 // Subtle hover background to indicate clickability
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(Color.primary.opacity(0.08))
+                RoundedRectangle(cornerRadius: DesignTokens.Dimensions.fieldRadius)
+                    .fill(DesignTokens.Colors.pickerBackground)
             }
         }
         .frame(width: DesignTokens.Dimensions.percentageWidth, alignment: .trailing)
@@ -195,7 +195,8 @@ final class PopupTextEntryCoordinator {
                 EditablePercentage(percentage: $percentage, range: 0...400)
             }
             .padding()
-            .background(Color.black)
+            .darkGlassBackground()
+            .environment(\.colorScheme, .dark)
         }
     }
     return PreviewWrapper()

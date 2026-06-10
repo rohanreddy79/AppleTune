@@ -78,9 +78,9 @@ extension View {
 /// white on the dark glass with a slightly stronger hairline. Tokens come
 /// from `DesignTokens.Colors.eqCardBackground` and `eqCardBorder`.
 ///
-/// The shadow uses a literal `Color.black.opacity(0.06)`. Shadows are a
-/// depth cue, not a chromatic surface, and remain readable in both modes
-/// without an appearance-aware token.
+/// The shadow uses `DesignTokens.Colors.cardShadow`. Shadows are a depth
+/// cue, not a chromatic surface, and remain readable in both modes without
+/// an appearance-aware token.
 struct LiftedCardBackgroundModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
@@ -93,7 +93,7 @@ struct LiftedCardBackgroundModifier: ViewModifier {
                     .strokeBorder(DesignTokens.Colors.eqCardBorder, lineWidth: 0.5)
             }
             .shadow(
-                color: Color.black.opacity(0.06),
+                color: DesignTokens.Colors.cardShadow,
                 radius: 1.5,
                 x: 0,
                 y: 0.5

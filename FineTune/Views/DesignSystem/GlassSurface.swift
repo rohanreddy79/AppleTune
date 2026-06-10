@@ -8,6 +8,14 @@ extension DesignTokens {
     enum Materials {
         /// Floating HUD panels (the volume overlay, both styles).
         static let hudSurface: Material = .regularMaterial
+
+        /// In-popup controls: dropdown triggers, segmented mode toggles,
+        /// inline save/rename fields, small bordered buttons.
+        static let controlSurface: Material = .regularMaterial
+
+        /// Translucent cards and capsule buttons that float on the popup
+        /// glass (offline banner, glass pill buttons, drag previews).
+        static let cardSurface: Material = .ultraThinMaterial
     }
 }
 

@@ -515,18 +515,11 @@ private struct PerAppHUD: View {
                 trailingRow
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.top, 14)
-        .padding(.bottom, 12)
+        .padding(.horizontal, DesignTokens.Spacing.lg)
+        .padding(.top, DesignTokens.Spacing.md)
+        .padding(.bottom, DesignTokens.Spacing.md)
         .frame(width: Self.frameWidth, height: Self.frameHeight)
-        .background {
-            RoundedRectangle(cornerRadius: Self.cornerRadius)
-                .fill(.regularMaterial)
-        }
-        .overlay {
-            RoundedRectangle(cornerRadius: Self.cornerRadius)
-                .strokeBorder(DesignTokens.Colors.hudBorder, lineWidth: 1)
-        }
+        .adaptiveGlassSurface(cornerRadius: Self.cornerRadius)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityDescription)
     }

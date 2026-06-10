@@ -122,10 +122,10 @@ struct EQPanelView: View {
             .allowsHitTesting(settings.isEnabled)
             .animation(.easeInOut(duration: 0.2), value: settings.isEnabled)
         }
-        .padding(.horizontal, 12)
+        .padding(.horizontal, DesignTokens.Spacing.md)
         .padding(.vertical, 10)
         .background {
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: DesignTokens.Dimensions.cardRadius)
                 .fill(DesignTokens.Colors.recessedBackground)
         }
         .padding(.horizontal, 2)
@@ -197,7 +197,7 @@ struct EQPanelView: View {
         .padding(.vertical, 4)
         .background {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
-                .fill(.regularMaterial)
+                .fill(DesignTokens.Materials.controlSurface)
         }
         .overlay {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
@@ -288,7 +288,7 @@ struct EQPanelView: View {
         .padding(.vertical, 4)
         .background {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
-                .fill(.regularMaterial)
+                .fill(DesignTokens.Materials.controlSurface)
         }
         .overlay {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)

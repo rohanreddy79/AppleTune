@@ -21,7 +21,7 @@ struct DropdownMenu<Item: Identifiable, Label: View, ItemContent: View>: View wh
     private let itemHeight: CGFloat = 26
     private let itemSpacing: CGFloat = 2
     private let verticalPadding: CGFloat = 12  // 6 top + 6 bottom
-    private let cornerRadius: CGFloat = 8
+    private let cornerRadius: CGFloat = DesignTokens.Dimensions.controlRadius
     private let animationDuration: Double = 0.15
 
     private var effectivePopoverWidth: CGFloat {
@@ -67,7 +67,7 @@ struct DropdownMenu<Item: Identifiable, Label: View, ItemContent: View>: View wh
         .buttonStyle(.plain)
         .background {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
-                .fill(.regularMaterial)
+                .fill(DesignTokens.Materials.controlSurface)
         }
         .overlay {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
@@ -177,7 +177,7 @@ private struct DropdownMenuItem<Item: Identifiable, ItemContent: View>: View whe
                 .frame(height: itemHeight)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(
-                    RoundedRectangle(cornerRadius: 5)
+                    RoundedRectangle(cornerRadius: DesignTokens.Dimensions.pickerItemRadius)
                         .fill(isHovered ? Color.accentColor.opacity(0.15) : Color.clear)
                 )
                 .contentShape(Rectangle())
@@ -212,7 +212,7 @@ struct GroupedDropdownMenu<Section: Identifiable & Hashable, Item: Identifiable,
     // Configuration
     private let itemHeight: CGFloat = 22
     private let sectionHeaderHeight: CGFloat = 24
-    private let cornerRadius: CGFloat = 8
+    private let cornerRadius: CGFloat = DesignTokens.Dimensions.controlRadius
     private let animationDuration: Double = 0.15
 
     private var effectivePopoverWidth: CGFloat {
@@ -247,7 +247,7 @@ struct GroupedDropdownMenu<Section: Identifiable & Hashable, Item: Identifiable,
         .buttonStyle(.plain)
         .background {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
-                .fill(.regularMaterial)
+                .fill(DesignTokens.Materials.controlSurface)
         }
         .overlay {
             RoundedRectangle(cornerRadius: DesignTokens.Dimensions.buttonRadius)
