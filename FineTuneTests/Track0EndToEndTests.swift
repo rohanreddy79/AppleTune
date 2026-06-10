@@ -152,7 +152,10 @@ struct Track0EndToEndTests {
 
         await coordinator.start()
         #expect(coordinator.state == .running)
-        #expect(model.prepared.load(ordering: .acquiring))
+        // Loaded into a local because #expect's macro expansion captures the
+        // receiver for diagnostics, and Atomic is non-copyable.
+        let prepared = model.prepared.load(ordering: .acquiring)
+        #expect(prepared)
 
         // — Signal plane (emulated): buffers arrive, features go up —
         let input = E2ETestABL(channels: 2, frames: frames)

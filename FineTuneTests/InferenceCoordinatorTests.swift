@@ -107,7 +107,10 @@ struct InferenceCoordinatorTests {
 
         await coordinator.start()
         #expect(coordinator.state == .running)
-        #expect(model.prepared.load(ordering: .acquiring),
+        // Loaded into a local because #expect's macro expansion captures the
+        // receiver for diagnostics, and Atomic is non-copyable.
+        let prepared = model.prepared.load(ordering: .acquiring)
+        #expect(prepared,
                 "prepare() must complete before the model is eligible")
 
         for _ in 0..<10 { ring.push(makeFrame()) }
