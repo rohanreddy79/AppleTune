@@ -2,9 +2,11 @@
 import SwiftUI
 import AppKit
 
-/// Circular tinted badge that replaces the leading radio button on a device row.
-/// Selected state uses a gradient of `Color.accentColor` so it follows the user's
-/// system accent at full scope. Unselected state uses a monochrome fill from
+/// Circular icon well that replaces the leading radio button on a device row —
+/// sized like Control Center's Wi-Fi circle (`iconWellSize`). Selected state
+/// inverts to a near-white filled circle (`iconWellSelectedFill`) with an
+/// accent-colored glyph, Control Center's engaged-toggle treatment. Unselected
+/// state uses a subtle monochrome fill from
 /// `DesignTokens.Colors.deviceBadgeMonoFill`.
 ///
 /// The badge owns no behavior. The parent row container handles tap-to-set-default
@@ -20,24 +22,16 @@ struct DeviceBadge: View {
     /// the row's domain.
     var fallbackSymbol: String = "speaker.wave.2.fill"
 
-    private static let badgeSize: CGFloat = 28
-    private static let glyphSize: CGFloat = 20
+    private static let badgeSize = DesignTokens.Dimensions.iconWellSize
+    private static let glyphSize = DesignTokens.Dimensions.iconSize
 
     var body: some View {
         ZStack {
-            // Background fill — accent gradient when selected, mono fill otherwise.
+            // Background fill — inverted near-white when selected (Control
+            // Center's engaged toggle), subtle mono fill otherwise.
             if isSelected {
                 Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.accentColor,
-                                Color.accentColor.opacity(0.78)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                    .fill(DesignTokens.Colors.iconWellSelectedFill)
             } else {
                 Circle()
                     .fill(DesignTokens.Colors.deviceBadgeMonoFill)
@@ -61,9 +55,12 @@ struct DeviceBadge: View {
         .accessibilityHidden(true)
     }
 
+    /// Accent glyph on the inverted near-white circle when selected;
+    /// applies fully to the SF Symbol fallback and tints template device
+    /// icons (full-color NSImages render as-is, as before).
     private var glyphForeground: Color {
         isSelected
-            ? Color.white
+            ? DesignTokens.Colors.accentPrimary
             : DesignTokens.Colors.deviceBadgeMonoForeground
     }
 }

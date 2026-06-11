@@ -108,13 +108,21 @@ struct AppRow: View {
                 // VU Meter
                 VUMeter(level: audioLevel, isMuted: isMutedExternal || volume == 0)
 
-                // App icon - clickable to activate app
+                // App icon in a circular well (Control Center's leading
+                // circle) - clickable to activate app
                 Button(action: onAppActivate) {
-                    Image(nsImage: app.icon)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: DesignTokens.Dimensions.rowContentHeight - 4, height: DesignTokens.Dimensions.rowContentHeight - 4)
-                        .opacity(isIconHovered ? 0.7 : 1.0)
+                    ZStack {
+                        Circle()
+                            .fill(DesignTokens.Colors.hoverSurface)
+                        Image(nsImage: app.icon)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: DesignTokens.Dimensions.iconSize,
+                                   height: DesignTokens.Dimensions.iconSize)
+                    }
+                    .frame(width: DesignTokens.Dimensions.iconWellSize,
+                           height: DesignTokens.Dimensions.iconWellSize)
+                    .opacity(isIconHovered ? 0.7 : 1.0)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel("Open \(app.name)")
