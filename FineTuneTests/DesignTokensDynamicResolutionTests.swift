@@ -239,4 +239,36 @@ struct DesignTokensDynamicResolutionTests {
                     equals: NSColor.white.withAlphaComponent(0.70),
                     in: Self.darkAqua)
     }
+
+    // MARK: Control Center slider tokens
+
+    @Test("ccSliderTrack resolves correctly in light and dark")
+    func ccSliderTrack() {
+        expectColor(DesignTokens.Colors.ccSliderTrack,
+                    equals: NSColor.black.withAlphaComponent(0.10),
+                    in: Self.aqua)
+        expectColor(DesignTokens.Colors.ccSliderTrack,
+                    equals: NSColor.white.withAlphaComponent(0.20),
+                    in: Self.darkAqua)
+    }
+
+    @Test("ccSliderFill resolves correctly in light and dark")
+    func ccSliderFill() {
+        expectColor(DesignTokens.Colors.ccSliderFill,
+                    equals: NSColor.white.withAlphaComponent(1.0),
+                    in: Self.aqua)
+        expectColor(DesignTokens.Colors.ccSliderFill,
+                    equals: NSColor.white.withAlphaComponent(0.90),
+                    in: Self.darkAqua)
+    }
+
+    @Test("ccSliderBorder resolves correctly in light and dark")
+    func ccSliderBorder() {
+        expectColor(DesignTokens.Colors.ccSliderBorder,
+                    equals: NSColor.black.withAlphaComponent(0.08),
+                    in: Self.aqua)
+        expectColor(DesignTokens.Colors.ccSliderBorder,
+                    equals: NSColor.white.withAlphaComponent(0.12),
+                    in: Self.darkAqua)
+    }
 }

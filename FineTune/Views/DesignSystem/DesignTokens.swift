@@ -302,6 +302,40 @@ enum DesignTokens {
             dark: NSColor.white.withAlphaComponent(0.5)
         )
 
+        // MARK: Control Center Slider
+
+        /// Unfilled track of the Control Center-style capsule slider.
+        /// Reads as a recessed translucent well on the glass HUD, matching
+        /// the macOS Control Center volume/brightness modules.
+        static let ccSliderTrack = dynamicColor(
+            name: "ccSliderTrack",
+            light: NSColor.black.withAlphaComponent(0.10),
+            dark: NSColor.white.withAlphaComponent(0.20)
+        )
+
+        /// Filled portion of the Control Center-style slider. Control Center
+        /// uses a white fill in both appearances; dark is pulled back slightly
+        /// so the capsule doesn't glare on the dark glass.
+        static let ccSliderFill = dynamicColor(
+            name: "ccSliderFill",
+            light: NSColor.white.withAlphaComponent(1.0),
+            dark: NSColor.white.withAlphaComponent(0.90)
+        )
+
+        /// Hairline edge of the Control Center-style slider capsule. Same
+        /// family as the other glass hairlines: defines the rim, stays quiet.
+        static let ccSliderBorder = dynamicColor(
+            name: "ccSliderBorder",
+            light: NSColor.black.withAlphaComponent(0.08),
+            dark: NSColor.white.withAlphaComponent(0.12)
+        )
+
+        /// Glyph embedded at the leading edge of the Control Center-style
+        /// slider. The fill never shrinks past the leading circle, so the
+        /// icon always sits on the white fill — dark in both modes, like
+        /// `thumbDot`. NOT themed.
+        static let ccSliderIcon: Color = .black.opacity(0.60)
+
         // MARK: HUD
 
         /// Active dot in Tahoe HUD tick track
@@ -445,6 +479,16 @@ enum DesignTokens {
 
         /// Circular thumb size
         static let sliderThumbSize: CGFloat = 12
+
+        // MARK: Control Center Slider
+
+        /// Full height of the Control Center-style capsule slider. The
+        /// capsule radius and the minimum fill width both derive from this,
+        /// so the fill collapses to a perfect leading circle at 0.
+        static let ccSliderHeight: CGFloat = 22
+
+        /// Point size of the SF Symbol embedded in the slider's leading circle
+        static let ccSliderIconSize: CGFloat = 11
 
         /// Minimum touch target
         static let minTouchTarget: CGFloat = 16
