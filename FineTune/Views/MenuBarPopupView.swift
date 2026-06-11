@@ -263,7 +263,7 @@ struct MenuBarPopupView: View {
             toggleDevicePriorityEdit()
         }
         .labelStyle(.iconOnly)
-        .buttonStyle(GlassIconButtonStyle(isActive: isEditingDevicePriority))
+        .buttonStyle(GlassIconButtonStyle(isActive: isEditingDevicePriority, shape: .circle))
         .font(.system(size: 12, weight: isEditingDevicePriority ? .bold : .regular))
         .animation(.spring(response: 0.3, dampingFraction: 0.75), value: isEditingDevicePriority)
         .help(isEditingDevicePriority ? "Done reordering" : "Reorder devices")
@@ -276,7 +276,7 @@ struct MenuBarPopupView: View {
             openSettingsWindow()
         }
         .labelStyle(.iconOnly)
-        .buttonStyle(GlassIconButtonStyle())
+        .buttonStyle(GlassIconButtonStyle(shape: .circle))
         .font(.system(size: 12))
         .help("FineTune Settings")
     }

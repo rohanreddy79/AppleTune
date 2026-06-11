@@ -131,7 +131,7 @@ struct AppRowControls: View {
                 }
                 .font(.system(size: 12))
             }
-            .buttonStyle(GlassIconButtonStyle(isActive: isEQExpanded))
+            .buttonStyle(GlassIconButtonStyle(isActive: isEQExpanded, shape: .circle))
             .accessibilityLabel(isEQExpanded ? "Close Equalizer" : "Equalizer")
             .help(isEQExpanded ? "Close Equalizer" : "Equalizer")
             .animation(.spring(response: 0.3, dampingFraction: 0.75), value: isEQExpanded)
