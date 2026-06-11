@@ -101,7 +101,7 @@ struct InactiveAppRow: View {
     }
 
     var body: some View {
-        ExpandableGlassRow(isExpanded: isEQExpanded, isFocused: isFocused) {
+        ExpandableGlassRow(isExpanded: isEQExpanded, isFocused: isFocused, style: .island) {
             // Header: Main row content (always visible)
             HStack(spacing: DesignTokens.Spacing.sm) {
                 // VU Meter (always 0 for inactive apps)

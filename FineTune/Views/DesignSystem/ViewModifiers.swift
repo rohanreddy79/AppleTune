@@ -34,6 +34,40 @@ struct HoverableRowModifier: ViewModifier {
     }
 }
 
+// MARK: - Capsule Island Row Modifier (Control Center floating islands)
+
+/// Floating capsule card for popup device rows — the Control Center island
+/// treatment. Always-on translucent glass (Liquid Glass on macOS 26+,
+/// `Materials.cardSurface` + hairline on 15.x via `AdaptiveGlassSurface`)
+/// with a `hoverSurface` wash layered on top for hover and keyboard focus.
+/// Expandable app rows get the same chrome inline in `ExpandableGlassRow`.
+struct CapsuleIslandRowModifier: ViewModifier {
+    let isFocused: Bool
+    @State private var isHovered = false
+
+    func body(content: Content) -> some View {
+        content
+            .padding(.horizontal, DesignTokens.Spacing.md)
+            .padding(.vertical, DesignTokens.Spacing.sm)
+            // Hover/focus wash sits above the glass, below the content.
+            .background(
+                RoundedRectangle(cornerRadius: DesignTokens.Dimensions.capsuleRadius)
+                    .fill(isHovered || isFocused ? DesignTokens.Colors.hoverSurface : Color.clear)
+                    .allowsHitTesting(false)
+            )
+            .adaptiveGlassSurface(
+                cornerRadius: DesignTokens.Dimensions.capsuleRadius,
+                fallbackMaterial: DesignTokens.Materials.cardSurface,
+                fallbackBorder: DesignTokens.Colors.eqCardBorder
+            )
+            .onHover { hovering in
+                isHovered = hovering
+            }
+            .animation(DesignTokens.Animation.hover, value: isHovered)
+            .animation(DesignTokens.Animation.hover, value: isFocused)
+    }
+}
+
 // MARK: - Section Header Style Modifier
 
 struct SectionHeaderStyleModifier: ViewModifier {
@@ -166,6 +200,11 @@ extension View {
     /// Applies hoverable row styling (forwards to floatingGlassRow)
     func hoverableRow(isFocused: Bool = false) -> some View {
         modifier(HoverableRowModifier(isFocused: isFocused))
+    }
+
+    /// Applies the floating capsule-island treatment (Control Center style)
+    func capsuleIslandRow(isFocused: Bool = false) -> some View {
+        modifier(CapsuleIslandRowModifier(isFocused: isFocused))
     }
 
     /// Applies section header text styling (uppercase, spaced, tertiary color)

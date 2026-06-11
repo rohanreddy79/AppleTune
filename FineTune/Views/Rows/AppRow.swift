@@ -102,7 +102,7 @@ struct AppRow: View {
     }
 
     var body: some View {
-        ExpandableGlassRow(isExpanded: isEQExpanded, isFocused: isFocused) {
+        ExpandableGlassRow(isExpanded: isEQExpanded, isFocused: isFocused, style: .island) {
             // Header: Main row content (always visible)
             HStack(spacing: DesignTokens.Spacing.sm) {
                 // VU Meter

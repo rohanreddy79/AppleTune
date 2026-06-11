@@ -123,7 +123,7 @@ struct DeviceRow: View {
                     onSetDefault()
                 }
             }
-            .hoverableRow(isFocused: isFocused)
+            .capsuleIslandRow(isFocused: isFocused)
     }
 
     // MARK: - Device Header
