@@ -50,6 +50,11 @@ struct DesignTokensSpacingTests {
         #expect(DesignTokens.Spacing.xl == 20)
         #expect(DesignTokens.Spacing.xxl == 24)
     }
+
+    @Test("Island spacing is the md step (Control Center gap)")
+    func islandSpacing() {
+        #expect(DesignTokens.Spacing.islandSpacing == DesignTokens.Spacing.md)
+    }
 }
 
 // MARK: - Dimensions
@@ -78,6 +83,15 @@ struct DesignTokensDimensionTests {
         #expect(DesignTokens.Dimensions.controlRadius > 0)
         #expect(DesignTokens.Dimensions.pickerItemRadius > 0)
         #expect(DesignTokens.Dimensions.fieldRadius > 0)
+        #expect(DesignTokens.Dimensions.capsuleRadius > 0)
+    }
+
+    @Test("Capsule radius is half the resting island row height")
+    func capsuleRadiusFormula() {
+        let expected = (DesignTokens.Dimensions.rowContentHeight
+            + DesignTokens.Spacing.sm * 2) / 2
+        #expect(DesignTokens.Dimensions.capsuleRadius == expected)
+        #expect(DesignTokens.Dimensions.capsuleRadius == 22)
     }
 
     @Test("Surface radii values match the shipped design")
@@ -88,13 +102,30 @@ struct DesignTokensDimensionTests {
         #expect(DesignTokens.Dimensions.fieldRadius == 4)
     }
 
-    @Test("Radius hierarchy: field < pickerItem < button < control < card ≤ popup")
+    @Test("Radius hierarchy: field < pickerItem < button < control < card ≤ popup < capsule")
     func radiusHierarchy() {
         #expect(DesignTokens.Dimensions.fieldRadius < DesignTokens.Dimensions.pickerItemRadius)
         #expect(DesignTokens.Dimensions.pickerItemRadius < DesignTokens.Dimensions.buttonRadius)
         #expect(DesignTokens.Dimensions.buttonRadius < DesignTokens.Dimensions.controlRadius)
         #expect(DesignTokens.Dimensions.controlRadius < DesignTokens.Dimensions.cardRadius)
         #expect(DesignTokens.Dimensions.cardRadius <= DesignTokens.Dimensions.cornerRadius)
+        #expect(DesignTokens.Dimensions.cornerRadius < DesignTokens.Dimensions.capsuleRadius)
+    }
+
+    @Test("Icon well houses the standard icon with breathing room")
+    func iconWellSize() {
+        #expect(DesignTokens.Dimensions.iconWellSize == 36)
+        #expect(DesignTokens.Dimensions.iconWellSize > DesignTokens.Dimensions.iconSize)
+        // The well must fit inside a resting capsule island
+        // (rowContentHeight + 2 × Spacing.sm = 2 × capsuleRadius).
+        #expect(DesignTokens.Dimensions.iconWellSize <= DesignTokens.Dimensions.capsuleRadius * 2)
+    }
+
+    @Test("Circular utility button sits between touch target and icon well")
+    func circularButtonSize() {
+        #expect(DesignTokens.Dimensions.circularButtonSize == 28)
+        #expect(DesignTokens.Dimensions.circularButtonSize >= DesignTokens.Dimensions.minTouchTarget)
+        #expect(DesignTokens.Dimensions.circularButtonSize <= DesignTokens.Dimensions.iconWellSize)
     }
 
     @Test("Slider dimensions are positive")
