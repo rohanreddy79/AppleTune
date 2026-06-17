@@ -128,20 +128,20 @@ struct TahoeStyleHUD: View {
 }
 
 #Preview("Tahoe — mid volume") {
-    TahoeStyleHUD(sliderFraction: 0.5, mute: false, deviceName: "Ronit's AirPods Pro")
+    TahoeStyleHUD(sliderFraction: 0.5, mute: false, deviceName: "AirPods Pro")
         .padding()
         .background(Color.black)
 }
 
 #Preview("Tahoe — muted") {
-    TahoeStyleHUD(sliderFraction: 0.5, mute: true, deviceName: "Ronit's AirPods Pro")
+    TahoeStyleHUD(sliderFraction: 0.5, mute: true, deviceName: "AirPods Pro")
         .padding()
         .background(Color.black)
 }
 
 #Preview("Tahoe — long name") {
     TahoeStyleHUD(sliderFraction: 0.75, mute: false,
-                  deviceName: "Ronit's MacBook Pro Speakers (Built-in Audio Output)")
+                  deviceName: "MacBook Pro Speakers (Built-in Audio Output)")
         .padding()
         .background(Color.black)
 }
@@ -153,19 +153,19 @@ struct TahoeStyleHUD: View {
 }
 
 #Preview("Tahoe — max volume") {
-    TahoeStyleHUD(sliderFraction: 1.0, mute: false, deviceName: "Ronit's AirPods Pro")
+    TahoeStyleHUD(sliderFraction: 1.0, mute: false, deviceName: "AirPods Pro")
         .padding()
         .background(Color.black)
 }
 
 #Preview("Tahoe — zero volume") {
-    TahoeStyleHUD(sliderFraction: 0.0, mute: false, deviceName: "Ronit's AirPods Pro")
+    TahoeStyleHUD(sliderFraction: 0.0, mute: false, deviceName: "AirPods Pro")
         .padding()
         .background(Color.black)
 }
 
 #Preview("Tahoe — light washout") {
-    TahoeStyleHUD(sliderFraction: 0.5, mute: false, deviceName: "Ronit's AirPods Pro")
+    TahoeStyleHUD(sliderFraction: 0.5, mute: false, deviceName: "AirPods Pro")
         .padding()
         .background(Color.white)
 }

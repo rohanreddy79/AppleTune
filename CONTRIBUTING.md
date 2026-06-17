@@ -1,13 +1,13 @@
-# Contributing to FineTune
+# Contributing to AppleTune
 
-Thank you for your interest in contributing to FineTune!
+Thank you for your interest in contributing to AppleTune!
 
 ## Building from Source
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/ronitsingh10/FineTune.git
-   cd FineTune
+   git clone https://github.com/rohanreddy79/AppleTune.git
+   cd AppleTune
    ```
 
 2. Open in Xcode:

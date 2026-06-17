@@ -12,18 +12,9 @@ Control the volume of every app independently, boost quiet ones up to 4x, route 
   <a href="https://github.com/rohanreddy79/AppleTune/actions"><img src="https://img.shields.io/github/actions/workflow/status/rohanreddy79/AppleTune/ci.yml?style=for-the-badge&labelColor=1c1c1e&label=CI" alt="CI"></a>
 </p>
 
-<p align="center">
-  <img src="assets/screenshot-main.png" alt="AppleTune popup showing per-app volume control, multi-device output routing, AutoEQ headphone correction, and device-level volume sliders" width="700">
-</p>
-<p align="center">
-  <img src="assets/screenshot-eq.png" alt="AppleTune showing an app row expanded with the EQ panel open and a Vocal Clarity preset selected" width="700">
-</p>
-
 ## What is AppleTune?
 
 AppleTune is a macOS menu bar audio utility: a free, open-source alternative to SoundSource. It gives you a slider for every app, the ability to send each one to a different output, a 10-band EQ with headphone correction, and a volume HUD — all wrapped in a Control Center–style interface that adopts Apple's Liquid Glass on macOS 26 and degrades cleanly on macOS 15.
-
-> AppleTune is a divergent fork of [FineTune](https://github.com/ronitsingh10/FineTune) by Ronit Singh, taken in its own direction. See [License](#license).
 
 ## Install
 
@@ -133,4 +124,4 @@ Planned features building on that foundation *(not yet shipped — listed so you
 
 AppleTune is licensed under the [GPL v3](LICENSE).
 
-It is based on [FineTune](https://github.com/ronitsingh10/FineTune), Copyright © 2026 Ronit Singh, also GPL v3. AppleTune's changes are Copyright © 2026 Rohan Reddy. As required by the GPL, the original copyright notice is preserved in the [LICENSE](LICENSE) file and this project remains free and open-source under the same terms.
+AppleTune's changes are Copyright © 2026 Rohan Reddy. It builds on a prior GPL-v3 project; the full upstream copyright notices are preserved in the [LICENSE](LICENSE) file as the license requires, and AppleTune remains free and open-source under the same terms.
