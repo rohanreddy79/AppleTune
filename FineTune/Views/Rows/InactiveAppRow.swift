@@ -101,17 +101,24 @@ struct InactiveAppRow: View {
     }
 
     var body: some View {
-        ExpandableGlassRow(isExpanded: isEQExpanded, isFocused: isFocused) {
+        ExpandableGlassRow(isExpanded: isEQExpanded, isFocused: isFocused, style: .island) {
             // Header: Main row content (always visible)
             HStack(spacing: DesignTokens.Spacing.sm) {
                 // VU Meter (always 0 for inactive apps)
                 VUMeter(level: 0, isMuted: isMuted || volume == 0)
 
-                // App icon (no activation for inactive apps)
-                Image(nsImage: icon)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: DesignTokens.Dimensions.rowContentHeight - 4, height: DesignTokens.Dimensions.rowContentHeight - 4)
+                // App icon in a circular well (no activation for inactive apps)
+                ZStack {
+                    Circle()
+                        .fill(DesignTokens.Colors.hoverSurface)
+                    Image(nsImage: icon)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: DesignTokens.Dimensions.iconSize,
+                               height: DesignTokens.Dimensions.iconSize)
+                }
+                .frame(width: DesignTokens.Dimensions.iconWellSize,
+                       height: DesignTokens.Dimensions.iconWellSize)
 
                 // App name + optional routing subtitle (hidden when the app is on
                 // system default).

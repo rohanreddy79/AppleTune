@@ -263,7 +263,7 @@ struct MenuBarPopupView: View {
             toggleDevicePriorityEdit()
         }
         .labelStyle(.iconOnly)
-        .buttonStyle(GlassIconButtonStyle(isActive: isEditingDevicePriority))
+        .buttonStyle(GlassIconButtonStyle(isActive: isEditingDevicePriority, shape: .circle))
         .font(.system(size: 12, weight: isEditingDevicePriority ? .bold : .regular))
         .animation(.spring(response: 0.3, dampingFraction: 0.75), value: isEditingDevicePriority)
         .help(isEditingDevicePriority ? "Done reordering" : "Reorder devices")
@@ -276,7 +276,7 @@ struct MenuBarPopupView: View {
             openSettingsWindow()
         }
         .labelStyle(.iconOnly)
-        .buttonStyle(GlassIconButtonStyle())
+        .buttonStyle(GlassIconButtonStyle(shape: .circle))
         .font(.system(size: 12))
         .help("FineTune Settings")
     }
@@ -466,7 +466,9 @@ struct MenuBarPopupView: View {
     }
 
     private var devicesContent: some View {
-        VStack(spacing: 0) {
+        // Main view spaces the capsule islands apart; edit mode keeps its
+        // flat, gapless list so drag-reordering targets stay contiguous.
+        VStack(spacing: isEditingDevicePriority ? 0 : DesignTokens.Spacing.islandSpacing) {
             if isEditingDevicePriority {
                 // Edit mode: drag-and-drop reordering (works for both output and input)
                 let defaultDeviceID = showingInputDevices
@@ -799,7 +801,7 @@ struct MenuBarPopupView: View {
 
     private func appsContent(scrollProxy: ScrollViewProxy) -> some View {
         let presets = audioEngine.settingsManager.getUserPresets()
-        return VStack(alignment: .leading, spacing: 0) {
+        return VStack(alignment: .leading, spacing: DesignTokens.Spacing.islandSpacing) {
             ForEach(audioEngine.displayableApps) { displayableApp in
                 switch displayableApp {
                 case .active(let app):

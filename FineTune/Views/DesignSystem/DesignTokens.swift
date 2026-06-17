@@ -217,9 +217,9 @@ enum DesignTokens {
             dark: NSColor.white.withAlphaComponent(0.10)
         )
 
-        /// Monochrome circular badge fill used on non-selected device rows.
-        /// The selected state uses a `Color.accentColor` gradient inline in
-        /// `DeviceBadge`; that does not need a token.
+        /// Monochrome circular icon-well fill used on non-selected device
+        /// rows. The selected state inverts to `iconWellSelectedFill` with an
+        /// accent-colored glyph (Control Center's engaged-toggle treatment).
         static let deviceBadgeMonoFill = dynamicColor(
             name: "deviceBadgeMonoFill",
             light: NSColor.black.withAlphaComponent(0.10),
@@ -227,11 +227,22 @@ enum DesignTokens {
         )
 
         /// Foreground color for the device-badge SF symbol on a non-selected
-        /// row. Selected rows use white directly inside `DeviceBadge`.
+        /// row. Selected rows use `accentPrimary` directly inside `DeviceBadge`.
         static let deviceBadgeMonoForeground = dynamicColor(
             name: "deviceBadgeMonoForeground",
             light: NSColor.black.withAlphaComponent(0.65),
             dark: NSColor.white.withAlphaComponent(0.70)
+        )
+
+        /// Inverted "engaged" fill for circular icon wells and circular
+        /// utility buttons — the near-white circle Control Center shows for
+        /// an active toggle (Wi-Fi on, screenshot armed). The glyph on top
+        /// flips to `accentPrimary`. Dark pulled back slightly so the circle
+        /// doesn't glare on the dark glass, matching `ccSliderFill`.
+        static let iconWellSelectedFill = dynamicColor(
+            name: "iconWellSelectedFill",
+            light: NSColor.white.withAlphaComponent(0.95),
+            dark: NSColor.white.withAlphaComponent(0.90)
         )
 
         /// Section-header text ("APPS", "GENERAL", etc.). The system
@@ -414,6 +425,11 @@ enum DesignTokens {
 
         /// 24pt - Extra extra large
         static let xxl: CGFloat = 24
+
+        /// 12pt — vertical gap between floating capsule islands in the
+        /// popup (device and app rows). Equal to `md`; named so call sites
+        /// read as layout intent rather than a bare step on the scale.
+        static let islandSpacing: CGFloat = md
     }
 
     // MARK: - Dimensions
@@ -460,11 +476,30 @@ enum DesignTokens {
         /// Corner radius for inline editable fields (percentage pill)
         static let fieldRadius: CGFloat = 4
 
+        /// Corner radius for floating capsule island rows (popup device and
+        /// app rows). Half the resting row height — `rowContentHeight` plus
+        /// the island's vertical padding (`Spacing.sm` per side) — so a
+        /// collapsed row renders as a perfect capsule and an expanded EQ
+        /// island keeps the same fully-rounded ends.
+        static var capsuleRadius: CGFloat {
+            (rowContentHeight + Spacing.sm * 2) / 2
+        }
+
         /// App/device icon size
         static let iconSize: CGFloat = 22
 
         /// Small icon size
         static let iconSizeSmall: CGFloat = 14
+
+        /// Diameter of the circular leading icon well on device and app
+        /// rows — Control Center's Wi-Fi/Bluetooth circle, housing the
+        /// device badge or app icon.
+        static let iconWellSize: CGFloat = 36
+
+        /// Diameter of small circular glass utility buttons (settings gear,
+        /// reorder pencil, per-row EQ toggle) — Control Center's
+        /// screenshot/mirroring circles, scaled to the popup header.
+        static let circularButtonSize: CGFloat = 28
 
         // MARK: Slider Dimensions (minimal style)
 

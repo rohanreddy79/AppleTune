@@ -60,7 +60,7 @@ struct InputDeviceRow: View {
                     onSetDefault()
                 }
             }
-            .hoverableRow(isFocused: isFocused)
+            .capsuleIslandRow(isFocused: isFocused)
             .onChange(of: volume) { _, newValue in
                 // Skip external sync mid-drag.
                 guard !isEditing else { return }

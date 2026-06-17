@@ -240,6 +240,19 @@ struct DesignTokensDynamicResolutionTests {
                     in: Self.darkAqua)
     }
 
+    @Test("iconWellSelectedFill resolves correctly in light and dark")
+    func iconWellSelectedFill() {
+        // Near-white inverted circle for engaged icon wells and circular
+        // utility buttons; dark pulled back to 0.90 like ccSliderFill so
+        // the circle doesn't glare on dark glass.
+        expectColor(DesignTokens.Colors.iconWellSelectedFill,
+                    equals: NSColor.white.withAlphaComponent(0.95),
+                    in: Self.aqua)
+        expectColor(DesignTokens.Colors.iconWellSelectedFill,
+                    equals: NSColor.white.withAlphaComponent(0.90),
+                    in: Self.darkAqua)
+    }
+
     // MARK: Control Center slider tokens
 
     @Test("ccSliderTrack resolves correctly in light and dark")
