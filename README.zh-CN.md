@@ -1,19 +1,15 @@
-<img src="assets/icon.png" width="170" height="170" alt="FineTune 应用图标" align="left"/>
+<img src="assets/icon.png" width="170" height="170" alt="AppleTune 应用图标" align="left"/>
 
-<h3>FineTune</h3>
+<h3>AppleTune</h3>
 
-为每一个 App 单独控制音量、把过轻的声音最高放大 4 倍、把音频路由到不同的扬声器，再用 EQ 和耳机曲线把声音调到自己喜欢的样子。常驻菜单栏，免费且开源。
-
-<a href="https://github.com/ronitsingh10/FineTune/releases/latest/download/FineTune.dmg"><img src="assets/download-badge.svg" alt="下载 macOS 版本" height="48"/></a>
+为每一个 App 单独控制音量、把过轻的声音最高放大 4 倍、把音频路由到不同的扬声器，再用 EQ 和耳机曲线把声音调到自己喜欢的样子。围绕 Apple 的 Liquid Glass 设计语言与控制中心风格界面打造，常驻菜单栏，免费且开源。
 
 <br clear="all"/>
 
 <p align="center">
-  <a href="https://github.com/ronitsingh10/FineTune/releases/latest"><img src="https://img.shields.io/github/v/release/ronitsingh10/FineTune?style=for-the-badge&labelColor=1c1c1e&color=0A84FF&logo=github&logoColor=white" alt="最新版本"></a>
-  <a href="https://github.com/ronitsingh10/FineTune/releases"><img src="https://img.shields.io/github/downloads/ronitsingh10/FineTune/total?style=for-the-badge&labelColor=1c1c1e&color=3a3a3c" alt="下载量"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPLv3-3a3a3c?style=for-the-badge&labelColor=1c1c1e" alt="许可证：GPL v3"></a>
-  <a href="https://ko-fi.com/ronitsingh10"><img src="https://img.shields.io/badge/Tip_on_Ko--fi-FF5E5B?style=for-the-badge&labelColor=1c1c1e&logo=ko-fi&logoColor=white" alt="在 Ko-fi 打赏"></a>
   <a href="https://www.apple.com/macos/"><img src="https://img.shields.io/badge/macOS-15%2B-3a3a3c?style=for-the-badge&labelColor=1c1c1e&logo=apple&logoColor=white" alt="macOS 15+"></a>
+  <a href="https://github.com/rohanreddy79/AppleTune/actions"><img src="https://img.shields.io/github/actions/workflow/status/rohanreddy79/AppleTune/ci.yml?style=for-the-badge&labelColor=1c1c1e&label=CI" alt="CI"></a>
 </p>
 
 <p align="center">
@@ -23,32 +19,33 @@
 > 本翻译由社区维护，更新可能晚于英文版。最新内容请以 [English README](README.md) 为准。
 > *This translation is community-maintained and may lag the English version. See the [English README](README.md) for the most current information.*
 
-<p align="center">
-  <img src="assets/screenshot-main.png" alt="FineTune 弹窗：按 App 控制音量、多设备输出路由（含设备选择浮窗）、AutoEQ 耳机校正以及设备级音量滑块" width="700">
-</p>
-<p align="center">
-  <img src="assets/screenshot-eq.png" alt="FineTune：Brave 浏览器一行展开，EQ 面板打开，已选中「Vocal Clarity」预设" width="700">
-</p>
+## AppleTune 是什么？
+
+AppleTune 是一款 macOS 菜单栏音频工具，是 SoundSource 的免费开源替代品。它为每个 App 提供独立滑块、可把不同应用送往不同输出、内置带耳机校正的 10 段 EQ，以及一个音量提示（HUD）—— 全部包裹在控制中心风格的界面里：在 macOS 26 上采用 Apple 的 Liquid Glass，在 macOS 15 上平滑回退。
 
 ## 安装
 
-**Homebrew**（推荐）
+AppleTune 正在积极开发中，目前通过源码构建。
 
 ```bash
-brew install --cask finetune
+git clone https://github.com/rohanreddy79/AppleTune.git
+cd AppleTune
+open FineTune.xcodeproj
 ```
 
-**手动安装** —— [下载最新版本](https://github.com/ronitsingh10/FineTune/releases/latest)
+选择 **FineTune** scheme 并按 **⌘R**。已签名的发行版（Homebrew cask + 公证 DMG）正在计划中。
+
+> **工具链：** AppleTune 使用 Swift 6 和 macOS 26 SDK 来支持其 Liquid Glass 代码路径，因此构建需要 **Xcode 26** —— 与其 CI 所用工具链一致。应用本身可运行于 macOS 15.0 (Sequoia) 及更高版本。
 
 ## 快速上手
 
-1. 安装 FineTune，从「应用程序」文件夹中启动
+1. 构建并启动 AppleTune
 2. 在系统弹出权限请求时，授予 **屏幕与系统音频录制** 权限
-3. 点击菜单栏中的 FineTune 图标，正在播放音频的 App 会自动出现
+3. 点击菜单栏中的 AppleTune 图标，正在播放音频的 App 会自动出现
 
 就是这样。直接拖动滑块、切换音频路由，或在菜单栏里玩一下 EQ 即可。
 
-> **小贴士：** 想让 FineTune 在某台设备接入时自动切换过去？打开编辑模式（铅笔图标），把它拖到内置扬声器上方即可。这是一次性设置，你的偏好顺序会被永久保存。
+> **小贴士：** 想让 AppleTune 在某台设备接入时自动切换过去？打开编辑模式（铅笔图标），把它拖到内置扬声器上方即可。这是一次性设置，你的偏好顺序会被永久保存。
 
 ## 功能
 
@@ -56,12 +53,12 @@ brew install --cask finetune
 - **按 App 控制音量** —— 为每个应用提供独立的音量滑块和静音
 - **按 App 增益** —— 提供 2x / 3x / 4x 三档增益预设
 - **置顶 App** —— 即使应用没有在播放声音，也让它一直显示在菜单栏中，方便提前配置音量、EQ 和路由
-- **忽略 App** —— 让 FineTune 完全脱离指定的应用，撤掉对应的音频接入点，让该应用回到 macOS 默认的音频通路
+- **忽略 App** —— 让 AppleTune 完全脱离指定的应用，撤掉对应的音频接入点，让该应用回到 macOS 默认的音频通路
 - **滚轮调节音量** —— 把鼠标悬停到弹窗、HUD 或 EQ 面板的任一滑块上，滚动滚轮即可调节
 
 ### ⌨️ 键盘
 - **全局音量快捷键** —— 在 设置 → 快捷键 中，给 **App Volume Up**、**App Volume Down** 与 **App Mute** 自定义按键。这里的「App」指的是当前在发声的应用，所以当 YouTube 标签页在后台播放、终端在前台时，按下音量减只会调小 YouTube，不会动到终端。如果当前没有任何声音，快捷键会回退到最前台的应用
-- **从任何地方唤起弹窗** —— 给 **Toggle FineTune Popup** 绑定一个快捷键，菜单栏弹窗就能随时开关，即便在全屏应用中也可以
+- **从任何地方唤起弹窗** —— 给 **Toggle AppleTune Popup** 绑定一个快捷键，菜单栏弹窗就能随时开关，即便在全屏应用中也可以
 - **可调节的步长** —— 在 设置 → 快捷键 → Volume Step 里选择 **Coarse / Normal / Fine / Extra-Fine**。这一项同时控制 F10–F12 媒体键、全局快捷键，以及弹窗里的方向键导航
 - **长按连续调节、调高时自动取消静音** —— 长按 App Volume Up 或 Down 会像 macOS 的方向键一样持续触发；当处于静音状态按音量加，会一次性取消静音并设置到新音量
 - **键盘操作弹窗** —— 弹窗打开后，**↑ / ↓** 在行间移动，**← / →** 调节当前焦点行的音量（按住 Shift = 2 倍步长），**M** 切换静音，**Return / Space** 触发，**Tab** 在「输出」与「输入」设备标签间切换，**Esc** 关闭。焦点行会自动滚动到中央
@@ -69,7 +66,7 @@ brew install --cask finetune
 ### 🔀 音频路由
 - **多设备输出** —— 同时将音频送往多台设备
 - **音频路由** —— 把不同 App 分发到不同输出，或随系统默认输出走
-- **设备优先级** —— 当新设备接入时，自定义 FineTune 切换的目标；当设备断开时，自动回退
+- **设备优先级** —— 当新设备接入时，自定义 AppleTune 切换的目标；当设备断开时，自动回退
 - **自动恢复** —— 设备重新接入后，相关 App 会自动回到这台设备，并保留原本的音量、路由与 EQ 设置
 
 ### 🎛 EQ 与校正
@@ -81,52 +78,57 @@ brew install --cask finetune
 ### 🖥 设备与系统
 - **输入设备控制** —— 监控并调节麦克风电平
 - **提示音音量** —— 在设置中控制 macOS 通知与提示音的音量
-- **智能音量后端** —— FineTune 会按设备自动选择硬件、DDC 或软件音量。如果某台 USB DAC 或 HDMI 输出的硬件滑块根本不起作用，可以在设备详情里强制使用软件音量，FineTune 会记住这台设备的选择
+- **智能音量后端** —— AppleTune 会按设备自动选择硬件、DDC 或软件音量。如果某台 USB DAC 或 HDMI 输出的硬件滑块根本不起作用，可以在设备详情里强制使用软件音量，AppleTune 会记住这台设备的选择
 - **设备详情** —— 点击任一设备旁的信息按钮，可以看到采样率（含选择器）、连接方式、UID 复制、独占模式提示，以及软件音量覆盖开关
 - **隐藏设备** —— 在编辑模式下用「眼睛」按钮把不想出现在列表里的输出或输入设备隐藏起来，逻辑与隐藏 App 一致
 - **蓝牙设备管理** —— 直接从菜单栏连接已配对的设备
 - **显示器扬声器控制** —— 通过 DDC 调节外接显示器的音量
-- **媒体按键与音量提示** —— 可选地接管 F10–F12 来控制默认输出设备，并在屏幕上显示 Tahoe 风格或经典风格的音量提示。所有写入都会走 FineTune 的音量管线，因此即使在 macOS 自身因为硬件滑块不可用而把媒体键灰掉的 USB 接口或 HDMI 输出上，按键依然有效
-- **动态菜单栏图标** —— 在「设置」中可选择四种风格（Default、Speaker、Waveform、Equalizer）。其中 **Speaker** 风格会随音量实时切换图标（零 / 低 / 中 / 高），静音时显示带斜线的扬声器；切换设备时，所有风格都会短暂闪现新输出对应的 SF Symbol。切换风格立即生效，无需重启
+- **媒体按键与音量提示** —— 可选地接管 F10–F12 来控制默认输出设备，并在屏幕上显示 Tahoe 风格或经典风格的音量提示。所有写入都会走 AppleTune 的音量管线，因此即使在 macOS 自身因为硬件滑块不可用而把媒体键灰掉的 USB 接口或 HDMI 输出上，按键依然有效
+- **动态菜单栏图标** —— 在「设置」中可选择四种风格（Default、Speaker、Waveform、Equalizer）。其中 **Speaker** 风格会随音量实时切换图标，静音时显示带斜线的扬声器。切换风格立即生效，无需重启
 - **菜单栏应用** —— 轻量、随时可用
 - **URL Scheme** —— 通过脚本自动化控制音量、静音、设备路由等
 
-### 🎨 外观
-- **浅色或深色主题** —— 设置 → 通用 → 主题 跟随 macOS，或将 FineTune 锁定为浅色 / 深色。菜单栏弹窗、所有浮窗以及音量提示会立即切换
-- **弹窗密度** —— 设置 → 通用 → Popup Size 选择 **Compact / Comfortable / Spacious**，并提供实时预览。Compact 在小屏幕上能容纳更多 App；Spacious 给触控板用户更大的点击区域
+### 🎨 设计 —— Liquid Glass 与控制中心
+- **Apple Liquid Glass** —— 在 macOS 26 上，弹窗、HUD、按钮、行与滑块都使用 Apple 的 `glassEffect`（动态折射与自适应对比度）渲染；在 macOS 15 上回退到系统的磨砂材质，因此两个系统上的观感都恰到好处
+- **控制中心风格界面** —— 设备与 App 行以胶囊「岛屿」形式悬浮，前导图标置于圆形凹槽内并带有反色的激活状态，音量滑块采用控制中心风格的胶囊。工具控件为圆形玻璃按钮
+- **统一设计系统** —— 每一个颜色、材质、圆角、间距与动画都流经单一的 `DesignTokens` 系统，并有数值锁定的测试，让观感保持一致、回归在构建时即被捕获
+- **浅色或深色主题** —— 设置 → 通用 → 主题 跟随 macOS，或将 AppleTune 锁定为浅色 / 深色。弹窗、所有浮窗以及音量提示会立即切换
+- **弹窗密度** —— 设置 → 通用 → Popup Size 选择 **Compact / Comfortable / Spacious**，并提供实时预览
+
+## 路线图
+
+AppleTune 正朝着 **AI 原生音频层** 演进 —— 本地、设备端模型根据上下文调整你的声音，且绝不触碰实时音频线程。其基础已经就位，并在 CI 中端到端验证：
+
+- 一套 **双平面架构**，让异步 AI 推理能在绝不引发爆音的前提下影响音频 —— 无锁参数总线、特征提取环、渲染路径中按可用性开关的挂载点（带硬旁路），以及带停滞看门狗的专用推理协调器。
+
+基于该基础规划的功能 *（尚未发布，列出以便你了解方向）*：
+
+- **Focus Render** —— 在检测到深度专注时弱化干扰、延后通知声
+- **Hearing Twin** —— 每日声音剂量计（听力健康）外加个性化校正曲线
+- **Front-Row 空间音频** —— 一键让任意曲目听起来像现场演出
+- **Smart Skip** —— 检测并压低播客 / 视频中的赞助商口播段
+- **通话清晰度** —— 把又薄又压缩的通话音频还原得更接近自然语音
 
 ## 文档
 
 - **[AutoEQ 与耳机校正](guide/autoeq.zh-CN.md)** —— 应用来自 [AutoEQ](https://github.com/jaakkopasanen/AutoEq) 项目的频响校正、导入 [EqualizerAPO](https://sourceforge.net/projects/equalizerapo/) 配置，或浏览 [autoeq.app](https://www.autoeq.app/)
-- **[URL Scheme](guide/url-schemes.md)** —— 通过终端、[快捷指令](https://support.apple.com/guide/shortcuts-mac)、[Raycast](https://raycast.com) 或脚本自动化 FineTune
+- **[URL Scheme](guide/url-schemes.md)** —— 通过终端、[快捷指令](https://support.apple.com/guide/shortcuts-mac)、[Raycast](https://raycast.com) 或脚本自动化 AppleTune
 - **[排查指引](guide/troubleshooting.md)** —— 权限问题、应用未出现、声音异常等
 
 ## 参与贡献
 
-- **给本仓库点 Star** —— 帮助更多人发现 FineTune
-- **报告 Bug** —— [新建 issue](https://github.com/ronitsingh10/FineTune/issues)
+- **给本仓库点 Star** —— 帮助更多人发现 AppleTune
+- **报告 Bug** —— [新建 issue](https://github.com/rohanreddy79/AppleTune/issues)
 - **贡献代码** —— 见 [CONTRIBUTING.md](CONTRIBUTING.md)
-
-### 从源码构建
-
-```bash
-git clone https://github.com/ronitsingh10/FineTune.git
-cd FineTune
-open FineTune.xcodeproj
-```
 
 ## 系统要求
 
-- macOS 15.0 (Sequoia) 或更高版本
+- 运行：macOS 15.0 (Sequoia) 或更高版本
+- 构建：Xcode 26（Swift 6、macOS 26 SDK）
 - 音频采集权限（首次启动时弹出请求）
-
-## 支持作者
-
-FineTune 永远免费且开源。如果它让你的一天稍微轻松了一点，可以请作者喝杯咖啡 —— 但完全不必勉强 🙏
-
-[![请我喝咖啡](https://img.shields.io/badge/Buy_me_a_coffee-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/ronitsingh10)
-
 
 ## 许可证
 
-[GPL v3](LICENSE)
+AppleTune 采用 [GPL v3](LICENSE) 许可。
+
+AppleTune 的改动版权归 © 2026 Rohan Reddy 所有。本项目基于一个此前的 GPL-v3 项目构建；完整的上游版权声明已按许可证要求保留在 [LICENSE](LICENSE) 文件中，AppleTune 在相同条款下保持免费与开源。

@@ -2,7 +2,7 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
     <channel>
         <title>FineTune Updates</title>
-        <link>https://github.com/ronitsingh10/FineTune</link>
+        <link>https://github.com/rohanreddy79/AppleTune</link>
         <description>Most recent updates to FineTune</description>
         <language>en</language>
         <!--
@@ -16,7 +16,7 @@
       <sparkle:shortVersionString>X.X.X</sparkle:shortVersionString>
       <pubDate>Day, DD Mon YYYY HH:MM:SS +0000</pubDate>
       <enclosure
-        url="https://github.com/ronitsingh10/FineTune/releases/download/vX.X.X/FineTune-X.X.X.dmg"
+        url="https://github.com/rohanreddy79/AppleTune/releases/download/vX.X.X/FineTune-X.X.X.dmg"
         sparkle:edSignature="ED_SIGNATURE_HERE"
         length="FILE_SIZE_BYTES"
         type="application/octet-stream"/>
@@ -29,7 +29,7 @@
             <sparkle:version>36</sparkle:version>
             <sparkle:shortVersionString>1.7.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.2</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ronitsingh10/FineTune/releases/download/v1.7.0/FineTune.dmg" length="5261637" type="application/octet-stream" sparkle:edSignature="G3m6hHXlf+89+DLPbEM040LT5VPs/gKPK6Kx4QKz1/Yddle4LpIRiS/4vujKNWHN1tm11pGxrV5zmez/BMIlBA=="/>
+            <enclosure url="https://github.com/rohanreddy79/AppleTune/releases/download/v1.7.0/FineTune.dmg" length="5261637" type="application/octet-stream" sparkle:edSignature="G3m6hHXlf+89+DLPbEM040LT5VPs/gKPK6Kx4QKz1/Yddle4LpIRiS/4vujKNWHN1tm11pGxrV5zmez/BMIlBA=="/>
         </item>
         <item>
             <title>1.6.0</title>
@@ -37,7 +37,7 @@
             <sparkle:version>35</sparkle:version>
             <sparkle:shortVersionString>1.6.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.2</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ronitsingh10/FineTune/releases/download/v1.6.0/FineTune.dmg" length="4925771" type="application/octet-stream" sparkle:edSignature="EIAmkZgYcvUlCJgutB4epczMw+EcVdruB8V9Rdhh16en0TBHuuTqedY6+HuQ8FYpQLvgBpQRRBmsiOsVQN0kCg=="/>
+            <enclosure url="https://github.com/rohanreddy79/AppleTune/releases/download/v1.6.0/FineTune.dmg" length="4925771" type="application/octet-stream" sparkle:edSignature="EIAmkZgYcvUlCJgutB4epczMw+EcVdruB8V9Rdhh16en0TBHuuTqedY6+HuQ8FYpQLvgBpQRRBmsiOsVQN0kCg=="/>
         </item>
         <item>
             <title>1.5.0</title>
@@ -45,7 +45,7 @@
             <sparkle:version>34</sparkle:version>
             <sparkle:shortVersionString>1.5.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.2</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ronitsingh10/FineTune/releases/download/v1.5.0/FineTune.dmg" length="4644191" type="application/octet-stream" sparkle:edSignature="UK0/NsqtvQCm53a3Ypl1nWOGNqlancXRoW1zpzKidaw7qWYbXwlhPFO5QF2Z1vuvDcYEaPrjRtddM90JxbyPDA=="/>
+            <enclosure url="https://github.com/rohanreddy79/AppleTune/releases/download/v1.5.0/FineTune.dmg" length="4644191" type="application/octet-stream" sparkle:edSignature="UK0/NsqtvQCm53a3Ypl1nWOGNqlancXRoW1zpzKidaw7qWYbXwlhPFO5QF2Z1vuvDcYEaPrjRtddM90JxbyPDA=="/>
         </item>
     </channel>
 </rss>

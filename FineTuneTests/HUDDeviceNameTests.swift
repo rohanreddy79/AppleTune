@@ -61,14 +61,14 @@ struct HUDDeviceNameSmokeTests {
     @Test("show() with a 60-char device name completes without crashing (overflow path)")
     func longNameSmoke() {
         let hud = makeController()
-        let longName = "Ronit's MacBook Pro Speakers (Built-in Audio Output)"
+        let longName = "MacBook Pro Speakers (Built-in Audio Output)"
         hud.show(sliderFraction: 0.75, mute: false, deviceName: longName)
         #expect(hud.showCallCount == 1)
     }
 
     @Test("TahoeStyleHUD constructs without error for a 60-char device name")
     func longNamePreviewConstruction() {
-        let longName = "Ronit's MacBook Pro Speakers (Built-in Audio Output)"
+        let longName = "MacBook Pro Speakers (Built-in Audio Output)"
         // Construction-only smoke; rendering is covered by xcode-cli preview.
         _ = TahoeStyleHUD(sliderFraction: 0.75, mute: false, deviceName: longName)
     }
