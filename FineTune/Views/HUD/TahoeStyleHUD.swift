@@ -84,18 +84,14 @@ struct TahoeStyleHUD: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             HStack(spacing: 8) {
-                // Hard-swap — symbolEffect(.replace.*) cross-fades the whole wave glyph on every bin change.
-                Image(systemName: displayMute ? "speaker.slash.fill" : waveIconName)
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(displayMute
-                                     ? DesignTokens.Colors.mutedIndicator
-                                     : DesignTokens.Colors.hudTileActive)
-                    .frame(width: 18, height: 18, alignment: .center)
-
-                LiquidGlassSlider(
+                // Control Center-style capsule: the wave glyph is embedded in
+                // the slider's leading circle (hard-swapped per bin change —
+                // symbolEffect(.replace.*) cross-fades the whole glyph).
+                ControlCenterSlider(
                     value: sliderBinding,
                     in: 0...1,
-                    showUnityMarker: false
+                    icon: displayMute ? "speaker.slash.fill" : waveIconName,
+                    iconColor: displayMute ? DesignTokens.Colors.mutedIndicator : nil
                 )
                 .opacity(displayMute ? 0.5 : 1.0)
                 .scrollWheelStep(sliderBinding, in: 0.0...1.0)
